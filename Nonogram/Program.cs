@@ -6,8 +6,10 @@ namespace Nonogram
         static void Main(string[] args)
         {
             GridRow myGridRow = new GridRow(7);
-            Console.WriteLine(myGridRow.GetGameRowItem(4).CellColumn);
-            Console.WriteLine(myGridRow.GetGameRowItem(4).CellRow);
+            for (int i = 0; i < 7; i++){
+                Console.WriteLine(myGridRow.GetGameRowItem(i).CellColumn);
+                Console.WriteLine(myGridRow.GetGameRowItem(i).CellRow);
+            }
         }
     }
 }
