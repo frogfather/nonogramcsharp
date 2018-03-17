@@ -3,35 +3,37 @@ namespace Nonogram
 {
     public class Cell
     {
-        public Cell()
+        public Cell(int row, int column)
         {
+            _row = row;
+            _column = column;
         }
 
-        public int Width
+        public int CellColumn
         {
             get
             {
-                return _width;
+                return _column;
             }
             set
             {
                 if (value > 0)
                 {
-                    _width = value;
+                    _column = value;
                 }
             }
         }
-        public int Height
+        public int CellRow
         {
             get
             {
-                return _height;
+                return _row;
             }
             set
             {
                 if (value > 0)
                 {
-                    _height = value;
+                    _row = value;
                 }
             }
         }
@@ -45,18 +47,35 @@ namespace Nonogram
             set
             {
                 if (!String.IsNullOrEmpty(value))
-                {
+                {   
+                    //should check if it's a hex value
                     _backgroundColour = value;
                 }
             }
         }
 
-        //pattern should be an enum. 
-        //or should it be more abstract?
+        public string UserValue
+        {
+            get; set;
+        }
 
-        private int _width;
-        private int _height;
+        public string AutoValue
+        {
+            get; set;
+        }
+
+        public bool ShowUser
+        {
+            get; set;
+        }
+
+        public bool isTestValue
+        {
+            get; set;
+        }
+
+        private int _column;
+        private int _row;
         private string _backgroundColour; //check it is a colour?
-        private string _pattern; 
     }
 }

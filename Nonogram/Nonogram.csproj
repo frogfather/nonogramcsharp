@@ -28,6 +28,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Cell.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="GridRow.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
