@@ -30,6 +30,7 @@
     <Compile Include="Cell.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="GridRow.cs" />
+    <Compile Include="Grid.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

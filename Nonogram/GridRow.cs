@@ -4,13 +4,13 @@ namespace Nonogram
 {
     public class GridRow
     {
-        public GridRow(int columns)
+        public GridRow(int rowNumber, int columns)
         {
             _gameRow = new List<Cell>();
             for (int i = 0; i < columns; i++)
             {
                 //create a new cell and add it to the cells array
-                _gameRow.Add(new Cell(0, i));
+                _gameRow.Add(new Cell(rowNumber, i));
             }
         }
 
@@ -26,7 +26,10 @@ namespace Nonogram
             }
 
         }
-
+        public int GetColCount()
+        {
+            return _gameRow.Count;
+        }
 
         private List<Cell> _gameRow;
     }

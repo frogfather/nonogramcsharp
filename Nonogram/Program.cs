@@ -5,11 +5,11 @@ namespace Nonogram
     {
         static void Main(string[] args)
         {
-            GridRow myGridRow = new GridRow(7);
-            for (int i = 0; i < 7; i++){
-                Console.WriteLine(myGridRow.GetGameRowItem(i).CellColumn);
-                Console.WriteLine(myGridRow.GetGameRowItem(i).CellRow);
-            }
+            Grid myGrid = new Grid(6,10);
+            for (int i = 0; i < myGrid.getRowCount(); i++){
+                for (int colNo = 0; colNo < myGrid.getGridRow(i).GetColCount(); colNo++)
+                    Console.WriteLine("row: "+myGrid.getGridRow(i).GetGameRowItem(colNo).CellRow + " col: " + myGrid.getGridRow(i).GetGameRowItem(colNo).CellColumn);
+            }   
         }
     }
 }
