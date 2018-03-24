@@ -7,6 +7,7 @@ namespace Nonogram
         {
             _row = row;
             _column = column;
+            _userValue = "clear";
         }
 
         public int CellColumn
@@ -56,7 +57,25 @@ namespace Nonogram
 
         public string UserValue
         {
-            get; set;
+            get
+            {
+                return _userValue;
+            }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    //event handler to signal that value has changed
+                    if (_userValue != value){
+                        ValueChangedEventArgs args = new ValueChangedEventArgs();
+                        args.OldValue = _userValue;
+                        args.NewValue = value;
+                        ValueChanged(this,args);  
+                    }
+
+                    _userValue = value;
+                }
+            }
         }
 
         public string AutoValue
@@ -74,8 +93,10 @@ namespace Nonogram
             get; set;
         }
 
+        public event ValueChangedDelegate ValueChanged;
         private int _column;
         private int _row;
+        private string _userValue;
         private string _backgroundColour; //check it is a colour?
     }
 }

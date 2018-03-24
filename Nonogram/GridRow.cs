@@ -14,7 +14,7 @@ namespace Nonogram
             }
         }
 
-        public Cell GetGameRowItem(int columnNumber)
+        public Cell GetCell(int columnNumber)
         {
             if ((columnNumber > -1) && (columnNumber < _gameRow.Count))
             {
