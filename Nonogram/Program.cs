@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 namespace Nonogram
 {
     public class Program
@@ -10,12 +11,17 @@ namespace Nonogram
             {
                 for (int colNo = 0; colNo < myGrid.getGridRow(i).GetColCount(); colNo++)
                 {
-                    Console.WriteLine("row: " + myGrid.getGridRow(i).GetCell(colNo).CellRow + " col: " + myGrid.getGridRow(i).GetCell(colNo).CellColumn);
                     //+=OnValueChanged is equivalent to += new ValueChangedDelegate(OnValueChanged)
                     myGrid.getGridRow(i).GetCell(colNo).ValueChanged += OnValueChanged; 
                 }
             }
+            List<ClueData> clueOptions = new List<ClueData>();
+            clueOptions.Add(new ClueData(4,"black"));
+            clueOptions.Add(new ClueData(7, "green"));
+            clueOptions.Add(new ClueData(3, "blue"));
+            Clues testClues = new Clues(clueOptions);                            
             myGrid.getGridRow(4).GetCell(3).UserValue = "cross";
+            Console.WriteLine(testClues.getClue(2).Number);
         }
 
         static void OnValueChanged(object sender, ValueChangedEventArgs args)

@@ -17,7 +17,7 @@ namespace Nonogram
         {
             if (index >= 0 && index < _clueList.Count)
                 {
-                    return _clueList[index]
+                return _clueList[index];
                 }
                 else
                 {
@@ -26,6 +26,6 @@ namespace Nonogram
 
         }
 
-        private List<Clue> _clueList;
+        private List<Clue> _clueList = new List<Clue>();
     }
 }
