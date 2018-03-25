@@ -33,6 +33,7 @@
     <Compile Include="Grid.cs" />
     <Compile Include="ValueChangedDelegate.cs" />
     <Compile Include="ValueChangedEventArgs.cs" />
+    <Compile Include="Clue.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

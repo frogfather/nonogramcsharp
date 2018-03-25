@@ -17,6 +17,7 @@ namespace Nonogram
             }
             myGrid.getGridRow(4).GetCell(3).UserValue = "cross";
         }
+
         static void OnValueChanged(object sender, ValueChangedEventArgs args)
         {
             if (sender is Cell)
