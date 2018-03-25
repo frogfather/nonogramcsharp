@@ -3,8 +3,11 @@ namespace Nonogram
 {
     public class Clue
     {
-        public Clue()
+        public Clue(int clueValue, string clueColour)
         {
+            Solved = false;
+            _number = clueValue;
+            _colour = clueColour;
         }
 
         public string Colour
