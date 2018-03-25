@@ -34,6 +34,8 @@
     <Compile Include="ValueChangedDelegate.cs" />
     <Compile Include="ValueChangedEventArgs.cs" />
     <Compile Include="Clue.cs" />
+    <Compile Include="Clues.cs" />
+    <Compile Include="ClueData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
