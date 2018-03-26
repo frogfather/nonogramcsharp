@@ -36,6 +36,10 @@
     <Compile Include="Clue.cs" />
     <Compile Include="Clues.cs" />
     <Compile Include="ClueData.cs" />
+    <Compile Include="Columns.cs" />
+    <Compile Include="Rows.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="GameData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
