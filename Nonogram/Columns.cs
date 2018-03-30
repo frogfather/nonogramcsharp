@@ -6,9 +6,30 @@ namespace Nonogram
     {
         public Columns(List<List<ClueData>> columnOptions)
         {
-            //creates a list of Clues objects which is in itself a list of Clue opjects
-            //Clues object should be renamed ClueLine or something more descriptive
+            foreach (List<ClueData> clueSet in columnOptions)
+            {
+                _columnClues.Add(new Clues(clueSet));
+            }
         }
-        private List<Clues> columnClues = new List<Clues>();
+
+        public Clues getClueSet(int index)
+        {
+            if (index >= 0 && index < _columnClues.Count)
+            {
+                return _columnClues[index];
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
+        public int colCount()
+        {
+            return _columnClues.Count;
+        }
+
+        private List<Clues> _columnClues = new List<Clues>();
     }
 }

@@ -9,12 +9,12 @@ namespace Nonogram
         public int rows;
         public int columns;
 
-        public GameData(GameData options)
+        public GameData(List<List<ClueData>> rowInfo, List<List<ClueData>> colInfo, int rowcount, int colcount)
         {
-            rowData = options.rowData;
-            columnData = options.columnData;
-            rows = options.rows;
-            columns = options.columns;
+            rowData = rowInfo;
+            columnData = colInfo;
+            rows = rowcount;
+            columns = colcount;
         }
     }
 }

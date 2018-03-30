@@ -6,11 +6,31 @@ namespace Nonogram
     {
         public Rows(List<List<ClueData>> rowOptions)
         {
-            //creates a list of Clues objects which is in itself a list of Clue opjects
-            //Clues object should be renamed ClueLine or something more descriptive
+            foreach (List<ClueData> clueSet in rowOptions)
+            {
+                _rowClues.Add(new Clues(clueSet));
+            }
 
         }
 
-        private List<Clues> rowClues = new List<Clues>();
+        public Clues getClueSet(int index)
+        {
+            if (index >= 0 && index < _rowClues.Count)
+            {
+                return _rowClues[index];
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
+        public int rowCount()
+        {
+            return _rowClues.Count;
+        }
+
+        private List<Clues> _rowClues = new List<Clues>();
     }
 };
