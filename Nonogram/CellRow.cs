@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 namespace Nonogram
 {
-    public class GridRow
+    public class CellRow
     {
-        public GridRow(int rowNumber, int columns)
+        public CellRow(int rowNumber, int columns)
         {
-            _gameRow = new List<Cell>();
+            _cellRow = new List<Cell>();
             for (int i = 0; i < columns; i++)
             {
                 //create a new cell and add it to the cells array
-                _gameRow.Add(new Cell(rowNumber, i));
+                _cellRow.Add(new Cell(rowNumber, i));
             }
         }
 
         public Cell GetCell(int columnNumber)
         {
-            if ((columnNumber > -1) && (columnNumber < _gameRow.Count))
+            if ((columnNumber > -1) && (columnNumber < _cellRow.Count))
             {
-                return _gameRow[columnNumber];
+                return _cellRow[columnNumber];
             }
             else
             {
@@ -28,9 +28,9 @@ namespace Nonogram
         }
         public int GetColCount()
         {
-            return _gameRow.Count;
+            return _cellRow.Count;
         }
 
-        private List<Cell> _gameRow;
+        private List<Cell> _cellRow;
     }
 }

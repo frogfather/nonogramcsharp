@@ -7,7 +7,7 @@ namespace Nonogram
         //need to pass in info for grid (rows and columns)
         //and info for rows (list of list of clueData)
         //and info for columns (same as above)
-        public Game(int gameRows, int gameCols)
+        public Game(int gameRows, int gameCols)//needs to be a new struct called gameData
         {
             _grid = new Grid(gameRows, gameCols);
             _rows = new List<Clues>();

@@ -6,14 +6,14 @@ namespace Nonogram
     {
         public Grid(int rows, int columns)
         {
-            _grid = new List<GridRow>();
+            _grid = new List<CellRow>();
             for (var i = 0; i < rows; i++)
             {
-                _grid.Add(new GridRow(i, columns));
+                _grid.Add(new CellRow(i, columns));
             }
         }
 
-        public GridRow getGridRow(int rowNumber)
+        public CellRow getCellRow(int rowNumber)
         {
             if ((rowNumber < _grid.Count) && (rowNumber >= 0))
             {
@@ -28,6 +28,7 @@ namespace Nonogram
         {
             return _grid.Count;
         }
-        private List<GridRow> _grid;
+        private List<CellRow> _grid;
+
     }
 }

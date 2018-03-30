@@ -4,15 +4,13 @@ namespace Nonogram
 {
     public class Rows
     {
-        //we need to feed a List of Lists of ClueData into the constructor
-        public Rows(List<List<ClueData>> rowOptions);
+        public Rows(List<List<ClueData>> rowOptions)
         {
-            foreach (List<ClueData> item in rowOptions)
-            {
-                
-            }
+            //creates a list of Clues objects which is in itself a list of Clue opjects
+            //Clues object should be renamed ClueLine or something more descriptive
+
         }
 
-        private List<Clues> rowList = new List<Clues>();
+        private List<Clues> rowClues = new List<Clues>();
     }
-}
+};
