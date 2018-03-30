@@ -29,7 +29,7 @@
   <ItemGroup>
     <Compile Include="Cell.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="GridRow.cs" />
+    <Compile Include="CellRow.cs" />
     <Compile Include="Grid.cs" />
     <Compile Include="ValueChangedDelegate.cs" />
     <Compile Include="ValueChangedEventArgs.cs" />
