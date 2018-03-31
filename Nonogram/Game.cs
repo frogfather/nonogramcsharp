@@ -14,7 +14,7 @@ namespace Nonogram
             _columns = new Columns(options.columnData);
         }
 
-        public CellRow getRow(int index)
+        public CellRow getGridCellRow(int index)//returns the specified row of cells
         {
             if (index >= 0 && index < _grid.getRowCount())
             {
@@ -26,7 +26,16 @@ namespace Nonogram
             }
         }
 
-        public Clues getRows(int index) //return the Clues object representing the clues for that row
+        public Rows Rows()
+        {
+            return _rows;
+        }
+        public Columns Cols()
+        {
+            return _columns;
+        }
+
+        public Clues getClueSetRow(int index) //return the Clues object representing the clues for that row
         {
             if (index >=0 && index < _rows.rowCount())
             {
@@ -38,17 +47,6 @@ namespace Nonogram
             }
         }
 
-        public Clues getColumns(int index)//return the Clues object representing the clues for that column
-        {
-            if (index >= 0 && index < _columns.colCount())
-            {
-                return _columns.getClueSet(index);
-            }
-            else
-            {
-                return null;
-            }
-        }
 
 
         private Grid _grid;

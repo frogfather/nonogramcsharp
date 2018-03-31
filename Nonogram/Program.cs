@@ -56,14 +56,25 @@ namespace Nonogram
 
             Game myGame = new Game(options);
             Console.WriteLine("Row clues");
-            //foreach(Clues clueRow in myGame.getRows())//add enumerator
-            //{
-            //    foreach(Clue clue in clueRow)
-            //    {
-            //        Console.Write(clue.Number);
-            //    }
-            //    Console.WriteLine("");
-            //}
+            foreach(Clues clueRow in myGame.Rows())//add enumerator
+            {
+                Console.Write("rows ");
+                foreach(Clue clue in clueRow)
+                {
+                    Console.Write(clue.Number + ",");
+                }
+                Console.WriteLine("");
+            }
+            foreach (Clues clueCol in myGame.Cols())//add enumerator
+            {
+                Console.Write("cols ");
+                foreach (Clue clue in clueCol)
+                {
+                    Console.Write(clue.Number + ",");
+                }
+                Console.WriteLine("");
+            }
+
         }
 
         static void OnValueChanged(object sender, ValueChangedEventArgs args)

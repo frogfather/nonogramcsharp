@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 namespace Nonogram
 {
-    public class Columns
+    public class Columns : IEnumerable
     {
+        public IEnumerator GetEnumerator() => _columnClues.GetEnumerator();
+
         public Columns(List<List<ClueData>> columnOptions)
         {
             foreach (List<ClueData> clueSet in columnOptions)
