@@ -6,15 +6,6 @@ namespace Nonogram
     {
         static void Main(string[] args)
         {
-            Grid myGrid = new Grid(6,10);
-            for (int i = 0; i < myGrid.getRowCount(); i++)
-            {
-                for (int colNo = 0; colNo < myGrid.getCellRow(i).GetColCount(); colNo++)
-                {
-                    //+=OnValueChanged is equivalent to += new ValueChangedDelegate(OnValueChanged)
-                    myGrid.getCellRow(i).GetCell(colNo).ValueChanged += OnValueChanged; 
-                }
-            }
 
             GameData options = new GameData();
 
@@ -55,6 +46,20 @@ namespace Nonogram
             options.rows = 4;
 
             Game myGame = new Game(options);
+
+            for (int i = 0; i < myGame.Grid().GetRowCount(); i++)
+            {
+                for (int colNo = 0; colNo < myGame.Grid().GetColCount(); colNo++)
+                {
+                    //+=OnValueChanged is equivalent to += new ValueChangedDelegate(OnValueChanged)
+                    myGame.GetGridCellRow(i).GetCell(colNo).ValueChanged += OnValueChanged;
+                }
+            }
+
+
+            Console.WriteLine("Game has " + myGame.Grid().GetColCount() +" columns and " + myGame.Grid().GetRowCount() + " rows");
+            myGame.Grid().GetCellRow(1).GetCell(2).UserValue = "Cabbage";
+
             Console.WriteLine("Row clues");
             foreach(Clues clueRow in myGame.Rows())//add enumerator
             {

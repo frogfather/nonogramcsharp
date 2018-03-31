@@ -13,7 +13,7 @@ namespace Nonogram
             }
         }
 
-        public CellRow getCellRow(int rowNumber)
+        public CellRow GetCellRow(int rowNumber)
         {
             if ((rowNumber < _grid.Count) && (rowNumber >= 0))
             {
@@ -24,10 +24,24 @@ namespace Nonogram
                 return null;
             }
         }
-        public int getRowCount()
+
+        public int GetRowCount()
         {
             return _grid.Count;
         }
+
+        public int GetColCount()
+        {
+            if (_grid.Count > 0)
+            {
+                return _grid[0].GetColCount();
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
         private List<CellRow> _grid;
 
     }

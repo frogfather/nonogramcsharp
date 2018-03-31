@@ -65,12 +65,17 @@ namespace Nonogram
             {
                 if (!String.IsNullOrEmpty(value))
                 {
-                    if (_userValue != value){
+                    if (_userValue != value)
+                    {
                         ValueChangedEventArgs args = new ValueChangedEventArgs();
                         args.OldValue = _userValue;
                         args.NewValue = value;
                         //event handler to signal that value has changed
-                        ValueChanged(this,args);  
+                        if (ValueChanged != null)
+                        {
+                            ValueChanged(this,args);      
+                        }
+
                     }
 
                     _userValue = value;
