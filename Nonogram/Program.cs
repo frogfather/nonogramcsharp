@@ -19,13 +19,76 @@ namespace Nonogram
 
             Game myGame = new Game(GetTestGame());
             SetChangeHandlers(myGame);
-
-
+            PrintGameToConsole(myGame);
         }
 
-        private static void PrintGameToConsole()
+        private static void PrintGameToConsole(Game currentGame)
         {
-                            
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            //get the max row clues. The column clues and the grid
+            //will start where they end
+            int maxColClueCount = currentGame.GetMaxColClues();
+            int maxRowClueCount = currentGame.GetMaxRowClues();
+            string offsetString = "";
+            string rowToPrint = "";
+
+            for (int i = 0; i < maxRowClueCount; i++)
+            {
+                offsetString += "  ";
+            }
+
+            //first print the column clues
+            //need to go from 1 to maxCol
+            for (int i = 0; i < maxColClueCount; i++)
+            {
+                rowToPrint = offsetString;
+
+                for (int col = 0; col < currentGame.Cols().colCount(); col++)
+                {
+                    int currentColClueCount = currentGame.Cols().getClueSet(col).getClueCount();
+                    if (currentColClueCount >= maxColClueCount - i)
+                    {
+                        rowToPrint += currentGame.Cols().getClueSet(col).getClue(i-(maxColClueCount - currentColClueCount)).Number + " ";
+                    }
+                    else
+                    {
+                        rowToPrint += "  ";
+                    }
+                }
+                Console.WriteLine(rowToPrint);
+            }
+
+            //now print the row clues AND the grid row
+            for (int row = 0; row < currentGame.Grid().GetRowCount();row++)
+            {
+                offsetString = "";
+                for (int i = 0; i < maxRowClueCount -1; i++)
+                {
+                    offsetString += "  ";
+                }
+                rowToPrint = offsetString;
+
+                //for each row, if the number of clues is < maxRow we fill with spaces
+                for (int i = 0; i < maxRowClueCount; i++)
+                {
+                    int currentRowClueCount = currentGame.Rows().getClueSet(row).getClueCount();
+                    if (currentRowClueCount >= (maxRowClueCount - i))
+                    {
+                        rowToPrint += currentGame.GetClueSetRow(row).getClue(i-(maxRowClueCount-currentRowClueCount)).Number + " ";
+                    }
+                    else
+                    {
+                        rowToPrint += "  ";
+                    }
+                }
+                //then add the blocks
+                for (int cell = 0; cell < currentGame.Cols().colCount();cell++)
+                {
+                    rowToPrint += "\u25A1 ";
+                }
+                Console.WriteLine(rowToPrint);
+            }
+
         }
 
         private static GameData GetTestGame()
