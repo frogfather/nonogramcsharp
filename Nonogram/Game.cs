@@ -52,6 +52,33 @@ namespace Nonogram
             }
         }
 
+        public int GetMaxRowClues()
+        {
+            //look at the clueRow property and find the longest clues
+            int maxClueLength = 0;
+            foreach (Clues clueRow in Rows())
+            {
+                if (clueRow.getClueCount() > maxClueLength)
+                {
+                    maxClueLength = clueRow.getClueCount();
+                }
+            }
+            return maxClueLength;
+        }
+
+        public int GetMaxColClues()
+        {
+            //look at the clueRow property and find the longest clues
+            int maxClueLength = 0;
+            foreach (Clues clueCol in Cols())
+            {
+                if (clueCol.getClueCount() > maxClueLength)
+                {
+                    maxClueLength = clueCol.getClueCount();
+                }
+            }
+            return maxClueLength;
+        }
 
 
         private Grid _grid;

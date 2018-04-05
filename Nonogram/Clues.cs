@@ -28,6 +28,11 @@ namespace Nonogram
 
         }
 
+        public int getClueCount()
+        {
+            return _clueList.Count;
+        }
+
 
         private List<Clue> _clueList = new List<Clue>();
     }
