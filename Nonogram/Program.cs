@@ -19,6 +19,7 @@ namespace Nonogram
 
             Game myGame = new Game(GetTestGame());
             SetChangeHandlers(myGame);
+            myGame.Grid().GetCellRow(2).GetCell(3).UserValue = "black";
             PrintGameToConsole(myGame);
         }
 
