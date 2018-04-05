@@ -82,9 +82,17 @@ namespace Nonogram
                     }
                 }
                 //then add the blocks
-                for (int cell = 0; cell < currentGame.Cols().colCount();cell++)
+                for (int cell = 0; cell < currentGame.Cols().colCount(); cell++)
                 {
-                    rowToPrint += "\u25A1 ";
+                    if (currentGame.Grid().GetCellRow(row).GetCell(cell).UserValue == "black")
+                    {
+                        rowToPrint += "\u25A3 ";
+                    }
+                    else
+                    {
+                        rowToPrint += "\u25A1 ";    
+                    }
+
                 }
                 Console.WriteLine(rowToPrint);
             }
