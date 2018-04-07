@@ -42,26 +42,47 @@ namespace Nonogram
             //check each row first
             //then each column
             //row is easy
-            for (int i = 0; i < gameToSolve.Grid().GetRowCount();i++)
+            int elementLength = AutoUtilities.GetElementLength(gameToSolve.Grid(), true);
+            for (int element = 0; element < gameToSolve.Grid().GetRowCount(); element++)
             {
-                CellRow currentRow = gameToSolve.Grid().GetCellRow(i);
-                Clues currentRowClues = gameToSolve.Rows().getClueSet(i);
-                solved = CellRowOverlap(currentRow,currentRowClues);
-
+                Clues currentElementClues = gameToSolve.Rows().getClueSet(element);
+                solved = CellRowOverlap(gameToSolve.Grid(), currentElementClues, element, elementLength, true);
                 totalSolved += solved;
                 solved = 0;
             }
-
+            elementLength = AutoUtilities.GetElementLength(gameToSolve.Grid(), false);
+            for (int element = 0; element < gameToSolve.Grid().GetColCount(); element++)
+            {
+                Clues currentElementClues = gameToSolve.Cols().getClueSet(element);
+                solved = CellRowOverlap(gameToSolve.Grid(), currentElementClues, element, elementLength, false);
+                totalSolved += solved;
+                solved = 0;
+            }
             return totalSolved;
         }
 
-        private static int CellRowOverlap(CellRow row, Clues clues)
+        private static int CellRowOverlap(Grid grid, Clues clues, int element, int elementLength, bool isRow)
         {
             int solved = 0;
-                     
+            Display.Log("Overlap element: " + element + " length: " + elementLength + " isRow = " + isRow);
+            //need to know what blocks are already filled in
 
 
             return solved;
+        }
+
+        private static bool Update(Grid grid, int col, int row, string value)
+        {
+            if (grid.GetCell(col, row).AutoValue != value)
+            {
+                grid.GetCell(col, row).AutoValue = value;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
     }
 }

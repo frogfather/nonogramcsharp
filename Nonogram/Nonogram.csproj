@@ -44,6 +44,7 @@
     <Compile Include="AutoUtilities.cs" />
     <Compile Include="PuzzleData.cs" />
     <Compile Include="Display.cs" />
+    <Compile Include="Block.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

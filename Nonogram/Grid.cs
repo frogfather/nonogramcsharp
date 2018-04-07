@@ -25,6 +25,11 @@ namespace Nonogram
             }
         }
 
+        public Cell GetCell(int column, int row)
+        {
+            return _grid[row].GetCell(column);
+        }
+
         public int GetRowCount()
         {
             return _grid.Count;
