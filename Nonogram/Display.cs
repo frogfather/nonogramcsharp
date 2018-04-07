@@ -3,7 +3,10 @@ namespace Nonogram
 {
     public static class Display
     {
-        public static void PrintGameToConsole(Game currentGame, Boolean auto)
+
+        public static void Log(string message) => Console.WriteLine(message);
+
+        public static void PrintGame(Game currentGame, Boolean auto)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             //get the max row clues. The column clues and the grid

@@ -19,8 +19,8 @@ namespace Nonogram
 
             Game myGame = new Game(PuzzleData.PuzzleTwo());
             SetChangeHandlers(myGame);
-            //myGame.Grid().GetCellRow(2).GetCell(3).AutoValue = "black";
-            Display.PrintGameToConsole(myGame,true);
+            Autosolve.Solve(myGame);
+            Display.PrintGame(myGame,true);
         }
 
 
