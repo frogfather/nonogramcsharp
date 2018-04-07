@@ -33,6 +33,18 @@ namespace Nonogram
             return _clueList.Count;
         }
 
+        public int GetLargestUnsolvedCluePos()
+        {
+            int largestPos = -1;
+            int largestValue = 0;
+            for (int i = 0; i < _clueList.Count; i++)
+            {
+                if(_clueList[i].Solved == false && _clueList[i].Number > largestValue){
+                    largestPos = i;
+                }
+            }
+            return largestPos;
+        }
 
         private List<Clue> _clueList = new List<Clue>();
     }

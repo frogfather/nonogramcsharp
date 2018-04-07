@@ -97,7 +97,9 @@ namespace Nonogram
                 }
                 Console.WriteLine(rowToPrint);
             }
-
+            //test of largest unsolved clue
+            int largestUnsolvedPos = currentGame.GetClueSetRow(0).GetLargestUnsolvedCluePos();
+            Console.WriteLine("largest unsolved clue is " + currentGame.GetClueSetRow(0).getClue(largestUnsolvedPos).Number + " at position "+ largestUnsolvedPos);
         }
 
         private static GameData GetTestGame()

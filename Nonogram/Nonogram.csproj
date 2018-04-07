@@ -40,6 +40,8 @@
     <Compile Include="Rows.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameData.cs" />
+    <Compile Include="Autosolve.cs" />
+    <Compile Include="AutoUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
