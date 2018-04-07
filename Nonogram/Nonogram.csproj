@@ -42,6 +42,8 @@
     <Compile Include="GameData.cs" />
     <Compile Include="Autosolve.cs" />
     <Compile Include="AutoUtilities.cs" />
+    <Compile Include="PuzzleData.cs" />
+    <Compile Include="Display.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

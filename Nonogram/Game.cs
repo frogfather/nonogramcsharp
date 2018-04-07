@@ -68,7 +68,7 @@ namespace Nonogram
 
         public int GetMaxColClues()
         {
-            //look at the clueRow property and find the longest clues
+            //look at the clueCol property and find the longest clues
             int maxClueLength = 0;
             foreach (Clues clueCol in Cols())
             {
