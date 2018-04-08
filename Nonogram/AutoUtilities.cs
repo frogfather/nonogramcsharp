@@ -68,6 +68,10 @@ namespace Nonogram
 
                 if (elementColour != "cross" && elementColour != "clear")
                 {
+                    if (blockLength == 0)
+                    {
+                        blockStart = i;    
+                    }
                     blockLength += 1;
                     blockColour = elementColour;
                 }
@@ -75,6 +79,7 @@ namespace Nonogram
                 if (elementColour != nextElementColour && blockLength > 0)
                 {
                     AddBlock(blockArray,blockStart,blockLength,blockColour);
+                    blockLength = 0;
                 }
             }
 
