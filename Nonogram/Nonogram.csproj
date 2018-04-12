@@ -47,6 +47,7 @@
     <Compile Include="Display.cs" />
     <Compile Include="Block.cs" />
     <Compile Include="Tests\IdentifyBlocksTest.cs" />
+    <Compile Include="Tests\OverallClueLengthTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

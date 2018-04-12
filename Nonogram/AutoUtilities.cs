@@ -91,5 +91,21 @@ namespace Nonogram
             blockList.Add(new Block(blockLength,blockStart,blockColour));
         }
 
+        public static int OverallClueLength(Clues clues)
+        {
+            int totalLength = 0;
+            string lastColour = "";
+            for (int i = 0; i < clues.getClueCount();i++)
+            {
+                totalLength += clues.getClue(i).Number;
+                if (lastColour == clues.getClue(i).Colour)
+                {
+                    totalLength += 1;
+                }
+                lastColour = clues.getClue(i).Colour;
+            }
+            return totalLength;
+        }
+
     }
 }
