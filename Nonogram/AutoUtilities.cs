@@ -23,10 +23,10 @@ namespace Nonogram
 
         }
 
-        public static List<Block> GetBlockInfo(Grid grid, int element, bool isRow)
+        public static Blocks GetBlockInfo(Grid grid, int element, bool isRow)
         {
-            List<Block> blockArray = new List<Block>();
-            //returns filled in blocks - each block has a length, start, colour and array of clues
+            List<BlockData> options = new List<BlockData>(); 
+
             int elementLength = GetElementLength(grid, isRow);
             int blockStart = 0;
             int blockLength = 0;
@@ -78,33 +78,12 @@ namespace Nonogram
 
                 if (elementColour != nextElementColour && blockLength > 0)
                 {
-                    AddBlock(blockArray,blockStart,blockLength,blockColour);
+                    options.Add(new BlockData(blockStart, blockLength, blockColour));
                     blockLength = 0;
                 }
             }
 
-            return blockArray;
-        }
-
-        public static void AddBlock(List<Block> blockList, int blockStart, int blockLength, string blockColour)
-        {
-            blockList.Add(new Block(blockLength,blockStart,blockColour));
-        }
-
-        public static int OverallClueLength(Clues clues)
-        {
-            int totalLength = 0;
-            string lastColour = "";
-            for (int i = 0; i < clues.getClueCount();i++)
-            {
-                totalLength += clues.getClue(i).Number;
-                if (lastColour == clues.getClue(i).Colour)
-                {
-                    totalLength += 1;
-                }
-                lastColour = clues.getClue(i).Colour;
-            }
-            return totalLength;
+            return new Blocks(options) ;
         }
 
     }

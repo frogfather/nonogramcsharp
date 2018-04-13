@@ -40,36 +40,36 @@ namespace Nonogram
         [Test()]
         public void IdentifyBlocksGetsCorrectBlockCount()
         {
-            List<Block> blockData = AutoUtilities.GetBlockInfo(testGame.Grid(), 0, true);
-            Assert.AreEqual(5,blockData.Count);
+            Blocks blockData = AutoUtilities.GetBlockInfo(testGame.Grid(), 0, true);
+            Assert.AreEqual(5,blockData.getBlockCount());
         }
 
         [Test()]
         public void FirstBlockHasLengthEight()
         {
-            List<Block> blockData = AutoUtilities.GetBlockInfo(testGame.Grid(), 0, true);
-            Assert.AreEqual(8, blockData[0].BlockLength);
+            Blocks blockData = AutoUtilities.GetBlockInfo(testGame.Grid(), 0, true);
+            Assert.AreEqual(8, blockData.getBlock(0).BlockLength);
         }
 
         [Test()]
         public void ThirdBlockStartsAtFourteen()
         {
-            List<Block> blockData = AutoUtilities.GetBlockInfo(testGame.Grid(), 0, true);
-            Assert.AreEqual(14, blockData[2].BlockStart);
+            Blocks blockData = AutoUtilities.GetBlockInfo(testGame.Grid(), 0, true);
+            Assert.AreEqual(14, blockData.getBlock(2).BlockStart);
         }
 
         [Test()]
         public void IdentifyBlocksCorrectlyIdentifiesBlockAtEndOfRow()
         {
-            List<Block> blockData = AutoUtilities.GetBlockInfo(testGame.Grid(), 0, true);
-            Assert.AreEqual(27, blockData[4].BlockStart);
+            Blocks blockData = AutoUtilities.GetBlockInfo(testGame.Grid(), 0, true);
+            Assert.AreEqual(27, blockData.getBlock(4).BlockStart);
         }
 
         [Test()]
         public void IdentifyBlocksCorrectlyIdentifiesBlockAtStartOfRow()
         {
-            List<Block> blockData = AutoUtilities.GetBlockInfo(testGame.Grid(), 0, true);
-            Assert.AreEqual(0, blockData[0].BlockStart);
+            Blocks blockData = AutoUtilities.GetBlockInfo(testGame.Grid(), 0, true);
+            Assert.AreEqual(0, blockData.getBlock(0).BlockStart);
         }
     }
 }

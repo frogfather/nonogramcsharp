@@ -29,13 +29,13 @@ namespace Nonogram.Tests
         [Test()]
         public void OverallClueLengthReturnsCorrectLength()
         {
-            Assert.AreEqual(12, AutoUtilities.OverallClueLength(testClues));
+            Assert.AreEqual(12, testClues.GetoverallClueLength());
         }
 
         [Test()]
         public void OverallClueLengthReturnsCorrectLengthForColourClues()
         {
-            Assert.AreEqual(17, AutoUtilities.OverallClueLength(colourClues));
+            Assert.AreEqual(17, colourClues.GetoverallClueLength());
         }
 
 

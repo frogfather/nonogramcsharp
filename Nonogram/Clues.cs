@@ -46,6 +46,23 @@ namespace Nonogram
             return largestPos;
         }
 
+
+        public int GetoverallClueLength()
+        {
+            int totalLength = 0;
+            string lastColour = "";
+            for (int i = 0; i < getClueCount(); i++)
+            {
+                totalLength += getClue(i).Number;
+                if (lastColour == getClue(i).Colour)
+                {
+                    totalLength += 1;
+                }
+                lastColour = getClue(i).Colour;
+            }
+            return totalLength;
+        }
+
         private List<Clue> _clueList = new List<Clue>();
     }
 }

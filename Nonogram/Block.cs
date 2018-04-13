@@ -4,10 +4,11 @@ namespace Nonogram
 {
     public class Block
     {
-        public Block(int length, int start, string colour)
+        public Block(BlockData options)
         {
-            BlockLength = length;
-            BlockStart = start;
+            BlockLength = options.length;
+            BlockStart = options.start;
+            BlockColour = options.colour;
             _blockClues = new List<Clue>();
         }
 

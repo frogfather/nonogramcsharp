@@ -48,6 +48,8 @@
     <Compile Include="Block.cs" />
     <Compile Include="Tests\IdentifyBlocksTest.cs" />
     <Compile Include="Tests\OverallClueLengthTest.cs" />
+    <Compile Include="Blocks.cs" />
+    <Compile Include="BlockData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
