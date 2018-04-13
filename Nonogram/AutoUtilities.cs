@@ -23,7 +23,7 @@ namespace Nonogram
 
         }
 
-        public static Blocks GetBlockInfo(Grid grid, int element, bool isRow)
+        public static Blocks GetBlocks(Grid grid, int element, bool isRow)
         {
             List<BlockData> options = new List<BlockData>(); 
 

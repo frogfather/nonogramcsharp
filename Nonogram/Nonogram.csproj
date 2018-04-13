@@ -50,6 +50,7 @@
     <Compile Include="Tests\OverallClueLengthTest.cs" />
     <Compile Include="Blocks.cs" />
     <Compile Include="BlockData.cs" />
+    <Compile Include="Tests\GridTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

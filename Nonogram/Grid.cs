@@ -47,6 +47,72 @@ namespace Nonogram
             }
         }
 
+        public int GetFirstFreeCell(int element, bool isRow)
+        {
+            int freeCellPos = -1;
+            int elementLength;
+            string elementAutoValue;
+            if (isRow)
+            {
+                elementLength = GetColCount();
+            }
+            else
+            {
+                elementLength = GetRowCount();
+            }
+
+            for (int i = 0; i < elementLength; i++)
+            {
+                if (isRow)
+                {
+                    elementAutoValue = GetCell(i, element).AutoValue;
+                }
+                else
+                {
+                    elementAutoValue = GetCell(element, i).AutoValue;
+                }
+                if (elementAutoValue != "cross")
+                {
+                    freeCellPos = i;
+                    break;
+                }
+            }
+            return freeCellPos;
+        }
+
+        public int GetLastFreeCell(int element, bool isRow)
+        {
+            int freeCellPos = -1;
+            int elementLength;
+            string elementAutoValue;
+            if (isRow)
+            {
+                elementLength = GetColCount();
+            }
+            else
+            {
+                elementLength = GetRowCount();
+            }
+
+            for (int i = elementLength-1; i >= 0; i--)
+            {
+                if (isRow)
+                {
+                    elementAutoValue = GetCell(i, element).AutoValue;
+                }
+                else
+                {
+                    elementAutoValue = GetCell(element, i).AutoValue;
+                }
+                if (elementAutoValue != "cross")
+                {
+                    freeCellPos = i;
+                    break;
+                }
+            }
+            return freeCellPos;
+        }
+
         private List<CellRow> _grid;
 
     }
