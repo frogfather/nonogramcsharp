@@ -30,12 +30,24 @@ namespace Nonogram
             return _grid[row].GetCell(column);
         }
 
-        public int GetRowCount()
+        public int GetLength(bool row)
+        {
+            if (row)
+            {
+                return GetRowCount();
+            }
+            else
+            {
+                return GetColCount();
+            }
+        }
+
+        private int GetRowCount()
         {
             return _grid.Count;
         }
 
-        public int GetColCount()
+        private int GetColCount()
         {
             if (_grid.Count > 0)
             {
@@ -112,6 +124,79 @@ namespace Nonogram
             }
             return freeCellPos;
         }
+
+        public Blocks GetBlocks(int element, bool isRow)
+        {
+            List<BlockData> options = new List<BlockData>();
+
+            int elementLength;
+            int blockStart = 0;
+            int blockLength = 0;
+            string blockColour = "";
+            string elementColour;
+            string nextElementColour;
+
+            if (isRow)
+            {
+                elementLength = GetColCount();
+            }
+            else
+            {
+                elementLength = GetRowCount();
+            }
+
+            for (int i = 0; i < elementLength; i++)
+            {
+                //examine each cell in the row or column
+                if (isRow)
+                {
+                    elementColour = GetCell(i, element).AutoValue;
+                    if (i < elementLength - 1)
+                    {
+                        nextElementColour = GetCell(i + 1, element).AutoValue;
+                    }
+                    else
+                    {
+                        nextElementColour = "clear";
+                    }
+                }
+                else
+                {
+                    elementColour = GetCell(element, i).AutoValue;
+                    if (i < elementLength - 1)
+                    {
+                        nextElementColour = GetCell(element, i + 1).AutoValue;
+                    }
+                    else
+                    {
+                        nextElementColour = "clear";
+                    }
+                }
+                if (i == 0)
+                {
+                    blockColour = elementColour;
+                }
+
+                if (elementColour != "cross" && elementColour != "clear")
+                {
+                    if (blockLength == 0)
+                    {
+                        blockStart = i;
+                    }
+                    blockLength += 1;
+                    blockColour = elementColour;
+                }
+
+                if (elementColour != nextElementColour && blockLength > 0)
+                {
+                    options.Add(new BlockData(blockStart, blockLength, blockColour));
+                    blockLength = 0;
+                }
+            }
+
+            return new Blocks(options);
+        }
+
 
         private List<CellRow> _grid;
 

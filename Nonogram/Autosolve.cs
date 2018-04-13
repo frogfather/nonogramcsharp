@@ -22,7 +22,7 @@ namespace Nonogram
         //Overlap
         public static void Solve(Game gameToSolve)
         {
-            int cellsToSolve = gameToSolve.Grid().GetRowCount() * gameToSolve.Grid().GetColCount();
+            int cellsToSolve = gameToSolve.Grid().GetLength(true) * gameToSolve.Grid().GetLength(false);
             int totalSolvedCells = 0;
             int solvedThisRound = 0;
 
@@ -39,19 +39,19 @@ namespace Nonogram
         {
             int totalSolved = 0;
             int solved = 0;
-            //check each row first
-            //then each column
-            //row is easy
-            int elementLength = AutoUtilities.GetElementLength(gameToSolve.Grid(), true);
-            for (int element = 0; element < gameToSolve.Grid().GetRowCount(); element++)
+
+            int elementLength = gameToSolve.Grid().GetLength(true); //number of rows
+
+            for (int element = 0; element < elementLength; element++)
             {
                 Clues currentElementClues = gameToSolve.Rows().getClueSet(element);
                 solved = CellRowOverlap(gameToSolve.Grid(), currentElementClues, element, elementLength, true);
                 totalSolved += solved;
                 solved = 0;
             }
-            elementLength = AutoUtilities.GetElementLength(gameToSolve.Grid(), false);
-            for (int element = 0; element < gameToSolve.Grid().GetColCount(); element++)
+
+            elementLength = gameToSolve.Grid().GetLength(false); //number of columns
+            for (int element = 0; element < elementLength; element++)
             {
                 Clues currentElementClues = gameToSolve.Cols().getClueSet(element);
                 solved = CellRowOverlap(gameToSolve.Grid(), currentElementClues, element, elementLength, false);

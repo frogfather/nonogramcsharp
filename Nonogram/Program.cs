@@ -18,9 +18,9 @@ namespace Nonogram
 
         static void SetChangeHandlers(Game currentGame)
         {
-            for (int i = 0; i < currentGame.Grid().GetRowCount(); i++)
+            for (int i = 0; i < currentGame.Grid().GetLength(true); i++)
             {
-                for (int colNo = 0; colNo < currentGame.Grid().GetColCount(); colNo++)
+                for (int colNo = 0; colNo < currentGame.Grid().GetLength(false); colNo++)
                 {
                     //+=OnValueChanged is equivalent to += new ValueChangedDelegate(OnValueChanged)
                     currentGame.GetGridCellRow(i).GetCell(colNo).ValueChanged += OnValueChanged;

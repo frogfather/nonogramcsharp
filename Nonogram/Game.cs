@@ -16,7 +16,7 @@ namespace Nonogram
 
         public CellRow GetGridCellRow(int index)//returns the specified row of cells
         {
-            if (index >= 0 && index < _grid.GetRowCount())
+            if (index >= 0 && index < _grid.GetLength(true))
             {
                 return _grid.GetCellRow(index);
             }

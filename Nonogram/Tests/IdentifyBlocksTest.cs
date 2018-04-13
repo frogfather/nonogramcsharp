@@ -40,35 +40,35 @@ namespace Nonogram
         [Test()]
         public void IdentifyBlocksGetsCorrectBlockCount()
         {
-            Blocks blockData = AutoUtilities.GetBlocks(testGame.Grid(), 0, true);
+            Blocks blockData = testGame.Grid().GetBlocks(0, true);
             Assert.AreEqual(5,blockData.getBlockCount());
         }
 
         [Test()]
         public void FirstBlockHasLengthEight()
         {
-            Blocks blockData = AutoUtilities.GetBlocks(testGame.Grid(), 0, true);
+            Blocks blockData = testGame.Grid().GetBlocks(0, true);
             Assert.AreEqual(8, blockData.getBlock(0).BlockLength);
         }
 
         [Test()]
         public void ThirdBlockStartsAtFourteen()
         {
-            Blocks blockData = AutoUtilities.GetBlocks(testGame.Grid(), 0, true);
+            Blocks blockData = testGame.Grid().GetBlocks(0, true);
             Assert.AreEqual(14, blockData.getBlock(2).BlockStart);
         }
 
         [Test()]
         public void IdentifyBlocksCorrectlyIdentifiesBlockAtEndOfRow()
         {
-            Blocks blockData = AutoUtilities.GetBlocks(testGame.Grid(), 0, true);
+            Blocks blockData = testGame.Grid().GetBlocks(0, true);
             Assert.AreEqual(27, blockData.getBlock(4).BlockStart);
         }
 
         [Test()]
         public void IdentifyBlocksCorrectlyIdentifiesBlockAtStartOfRow()
         {
-            Blocks blockData = AutoUtilities.GetBlocks(testGame.Grid(), 0, true);
+            Blocks blockData = testGame.Grid().GetBlocks(0, true);
             Assert.AreEqual(0, blockData.getBlock(0).BlockStart);
         }
     }

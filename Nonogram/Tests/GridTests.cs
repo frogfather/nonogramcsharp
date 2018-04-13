@@ -23,15 +23,15 @@ namespace Nonogram.Tests
         public void ColCountIsSix()
         {
             int colCount;
-            colCount = testGrid.GetColCount();
+            colCount = testGrid.GetLength(false);
             Assert.AreEqual(6, colCount);
         }
         [Test()]
         public void RowCountIsEight()
         {
             int rowCount;
-            rowCount = testGrid.GetRowCount();
-            Assert.AreEqual(8, rowCount);
+            rowCount = testGrid.GetLength(true);
+            Assert.AreEqual(6, rowCount);
         }
 
 
