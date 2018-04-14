@@ -125,6 +125,7 @@ namespace Nonogram
             return freeCellPos;
         }
 
+
         public Blocks GetBlocks(int element, bool isRow)
         {
             List<BlockData> options = new List<BlockData>();

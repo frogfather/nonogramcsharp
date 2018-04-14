@@ -42,7 +42,6 @@
     <Compile Include="Game.cs" />
     <Compile Include="GameData.cs" />
     <Compile Include="Autosolve.cs" />
-    <Compile Include="AutoUtilities.cs" />
     <Compile Include="PuzzleData.cs" />
     <Compile Include="Display.cs" />
     <Compile Include="Block.cs" />
@@ -51,6 +50,9 @@
     <Compile Include="Blocks.cs" />
     <Compile Include="BlockData.cs" />
     <Compile Include="Tests\GridTests.cs" />
+    <Compile Include="Space.cs" />
+    <Compile Include="Spaces.cs" />
+    <Compile Include="SpaceData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

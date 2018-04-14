@@ -30,6 +30,8 @@ namespace Nonogram
             set;
         }
 
+        public int GetClueCount() => _blockClues.Count;
+
         public void AddClue(Clue clue)
         {
             if (!_blockClues.Contains(clue))
