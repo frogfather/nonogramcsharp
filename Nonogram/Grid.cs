@@ -129,7 +129,7 @@ namespace Nonogram
         {
             if (position >= elementLength)
             {
-                return "clear";
+                return "cross";
             }
 
             if (isRow)
@@ -202,6 +202,42 @@ namespace Nonogram
             return new Blocks(options);
         }
 
+        public Spaces GetSpaces(int element, bool isRow)
+        {
+            List<SpaceData> options = new List<SpaceData>();
+
+            int elementLength;
+            int spaceStart = 0;
+            int spaceLength = 0;
+            string elementColour;
+            string nextElementColour;
+
+            elementLength = GetElementLength(isRow);
+
+            for (int i = 0; i < elementLength; i++)
+            {
+                //examine each cell in the row or column
+                elementColour = GetElementColour(i, element, elementLength, isRow);
+                nextElementColour = GetElementColour(i + 1, element, elementLength, isRow);
+
+
+                if (elementColour != "cross")
+                {
+                    if (spaceLength == 0)
+                    {
+                        spaceStart = i;
+                    }
+                    spaceLength += 1;
+                    if (nextElementColour == "cross")
+                    {
+                        options.Add(new SpaceData(spaceStart, spaceLength));
+                        spaceLength = 0;
+                    }
+                }
+            }
+
+            return new Spaces(options);
+        }
 
         private List<CellRow> _grid;
 

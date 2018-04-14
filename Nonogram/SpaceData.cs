@@ -6,7 +6,7 @@ namespace Nonogram
         public int start;
         public int length;
 
-        public SpaceData(int sStart, int sLength, string bColour)
+        public SpaceData(int sStart, int sLength)
         {
             start = sStart;
             length = sLength;
