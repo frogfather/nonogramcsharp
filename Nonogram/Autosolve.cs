@@ -20,6 +20,7 @@ namespace Nonogram
         //SingleClue
         //EdgeProximity
         //Overlap
+
         public static void Solve(Game gameToSolve)
         {
             int cellsToSolve = gameToSolve.Grid().GetLength(true) * gameToSolve.Grid().GetLength(false);
@@ -39,7 +40,8 @@ namespace Nonogram
         {
             int totalSolved = 0;
             int solved = 0;
-
+            //this iterates through each row and column in the game
+            //and checks for points where cells must be filled in
             int elementLength = gameToSolve.Grid().GetLength(true); //number of rows
 
             for (int element = 0; element < elementLength; element++)
@@ -64,9 +66,16 @@ namespace Nonogram
         private static int CellRowOverlap(Grid grid, Clues clues, int element, int elementLength, bool isRow)
         {
             int solved = 0;
-            Display.Log("Overlap element: " + element + " length: " + elementLength + " isRow = " + isRow);
-            //need to know what blocks are already filled in
+            if (isRow)
+            {
+                Display.Log("Overlap check on row: " + element + " length: ");
+            }
+            else
+            {
+                Display.Log("Overlap check on col: " + element + " length: ");
+            }
 
+            //this method has not been written yet
 
             return solved;
         }

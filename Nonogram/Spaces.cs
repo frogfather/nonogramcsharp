@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Nonogram
 {
-    public class Spaces : IEnumerable;
+    public class Spaces : IEnumerable
     {
         public IEnumerator GetEnumerator() => _spaceList.GetEnumerator();
 

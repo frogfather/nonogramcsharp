@@ -125,6 +125,38 @@ namespace Nonogram
             return freeCellPos;
         }
 
+        public string GetElementColour(int position, int element, int elementLength, bool isRow)
+        {
+            if (position >= elementLength)
+            {
+                return "clear";
+            }
+
+            if (isRow)
+            {                
+                return GetCell(position, element).AutoValue;
+            }
+            else
+            {
+                
+                return GetCell(element, position).AutoValue;
+
+            }
+
+        }
+
+        public int GetElementLength(bool isRow)
+        {
+            if (isRow)
+            {
+                return GetColCount();
+            }
+            else
+            {
+                return GetRowCount();
+            }
+
+        }
 
         public Blocks GetBlocks(int element, bool isRow)
         {
@@ -137,42 +169,14 @@ namespace Nonogram
             string elementColour;
             string nextElementColour;
 
-            if (isRow)
-            {
-                elementLength = GetColCount();
-            }
-            else
-            {
-                elementLength = GetRowCount();
-            }
-
+            elementLength = GetElementLength(isRow);
+        
             for (int i = 0; i < elementLength; i++)
             {
                 //examine each cell in the row or column
-                if (isRow)
-                {
-                    elementColour = GetCell(i, element).AutoValue;
-                    if (i < elementLength - 1)
-                    {
-                        nextElementColour = GetCell(i + 1, element).AutoValue;
-                    }
-                    else
-                    {
-                        nextElementColour = "clear";
-                    }
-                }
-                else
-                {
-                    elementColour = GetCell(element, i).AutoValue;
-                    if (i < elementLength - 1)
-                    {
-                        nextElementColour = GetCell(element, i + 1).AutoValue;
-                    }
-                    else
-                    {
-                        nextElementColour = "clear";
-                    }
-                }
+                elementColour = GetElementColour(i, element, elementLength, isRow);
+                nextElementColour = GetElementColour(i+1, element, elementLength, isRow);
+
                 if (i == 0)
                 {
                     blockColour = elementColour;

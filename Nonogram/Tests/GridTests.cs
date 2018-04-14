@@ -31,7 +31,7 @@ namespace Nonogram.Tests
         {
             int rowCount;
             rowCount = testGrid.GetLength(true);
-            Assert.AreEqual(6, rowCount);
+            Assert.AreEqual(8, rowCount);
         }
 
 
