@@ -63,6 +63,7 @@ namespace Nonogram
             return totalLength;
         }
 
+
         private List<Clue> _clueList = new List<Clue>();
     }
 }

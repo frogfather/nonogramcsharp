@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections;
 namespace Nonogram
 {
     public static class Autosolve
@@ -47,6 +49,9 @@ namespace Nonogram
             for (int element = 0; element < elementLength; element++)
             {
                 Clues currentElementClues = gameToSolve.Rows().getClueSet(element);
+                Blocks currentElementBlocks = gameToSolve.Grid().GetBlocks(element, true);
+                Spaces currentSpaces = gameToSolve.Grid().GetSpaces(element, true);
+
                 solved = CellRowOverlap(gameToSolve.Grid(), currentElementClues, element, elementLength, true);
                 totalSolved += solved;
                 solved = 0;
@@ -56,6 +61,9 @@ namespace Nonogram
             for (int element = 0; element < elementLength; element++)
             {
                 Clues currentElementClues = gameToSolve.Cols().getClueSet(element);
+                Blocks currentElementBlocks = gameToSolve.Grid().GetBlocks(element, true);
+                Spaces currentSpaces = gameToSolve.Grid().GetSpaces(element, true);
+
                 solved = CellRowOverlap(gameToSolve.Grid(), currentElementClues, element, elementLength, false);
                 totalSolved += solved;
                 solved = 0;
@@ -66,14 +74,7 @@ namespace Nonogram
         private static int CellRowOverlap(Grid grid, Clues clues, int element, int elementLength, bool isRow)
         {
             int solved = 0;
-            if (isRow)
-            {
-                Display.Log("Overlap check on row: " + element + " length: ");
-            }
-            else
-            {
-                Display.Log("Overlap check on col: " + element + " length: ");
-            }
+            //want to see if 
 
             //this method has not been written yet
 

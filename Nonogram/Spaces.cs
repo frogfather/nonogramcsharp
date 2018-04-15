@@ -41,6 +41,15 @@ namespace Nonogram
             return _spaceList.Count;
         }
 
+        public int GetoverallSpaceLength()
+        {
+            int totalLength = 0;
+            foreach (Space space in _spaceList)
+            {
+                totalLength += space.SpaceLength;
+            }
+            return totalLength;
+        }
 
         private List<Space> _spaceList = new List<Space>();
     }
