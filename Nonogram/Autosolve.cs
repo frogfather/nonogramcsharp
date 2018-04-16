@@ -74,11 +74,57 @@ namespace Nonogram
         private static int CellRowOverlap(Grid grid, Clues clues, int element, int elementLength, bool isRow)
         {
             int solved = 0;
-            //want to see if 
+
 
             //this method has not been written yet
 
             return solved;
+        }
+
+        private static bool CluesWillFitInSpaces(Clues clues, Spaces spaces)
+        {
+
+            List<Space> spaceList = new List<Space>();
+            List<Clue> clueList = new List<Clue>();
+            //first put all the spaces into spacelist
+            //and all the clues into clueList
+            foreach(Space space in spaces)
+            {
+                spaceList.Add(space);
+            }
+            foreach(Clue clue in clues)
+            {
+                clueList.Add(clue);
+            }
+
+            bool matchFound = false;
+            bool finished = false;
+            while (!finished)
+
+            {
+                //move the next clue into the last space
+                spaceList[spaceList.Count].AddClue(clueList[0]);
+                if (clueList.Count > 0)
+                {
+                    clueList.RemoveAt(0);    
+                }
+
+                for (int i = spaceList.Count - 1; i >= 0;i--)
+                {
+                    // for each space, if the clues are too long to fit, move the first one out
+                    //need to adjust this in case more than one clue needs moved out!
+                    if (spaceList[i].GetClueLength() > spaceList[i].SpaceLength && i > 0)
+                    {
+                        //we need to move the first clue to the next space
+                        spaceList[i - 1].AddClue(spaceList[i].RemoveClue(0));
+
+                    }
+                }
+
+            }
+
+
+            return false;
         }
 
         private static bool Update(Grid grid, int col, int row, string value)

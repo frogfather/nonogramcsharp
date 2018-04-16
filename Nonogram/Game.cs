@@ -58,9 +58,9 @@ namespace Nonogram
             int maxClueLength = 0;
             foreach (Clues clueRow in Rows())
             {
-                if (clueRow.getClueCount() > maxClueLength)
+                if (clueRow.GetClueCount() > maxClueLength)
                 {
-                    maxClueLength = clueRow.getClueCount();
+                    maxClueLength = clueRow.GetClueCount();
                 }
             }
             return maxClueLength;
@@ -72,9 +72,9 @@ namespace Nonogram
             int maxClueLength = 0;
             foreach (Clues clueCol in Cols())
             {
-                if (clueCol.getClueCount() > maxClueLength)
+                if (clueCol.GetClueCount() > maxClueLength)
                 {
-                    maxClueLength = clueCol.getClueCount();
+                    maxClueLength = clueCol.GetClueCount();
                 }
             }
             return maxClueLength;

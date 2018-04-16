@@ -27,16 +27,23 @@ namespace Nonogram.Tests
         }
 
         [Test()]
-        public void OverallClueLengthReturnsCorrectLength()
+        public void GetClueLengthReturnsCorrectLength()
         {
-            Assert.AreEqual(12, testClues.GetoverallClueLength());
+            Assert.AreEqual(12, testClues.GetClueLength());
         }
 
         [Test()]
-        public void OverallClueLengthReturnsCorrectLengthForColourClues()
+        public void GetClueLengthReturnsCorrectLengthForSubrange()
         {
-            Assert.AreEqual(17, colourClues.GetoverallClueLength());
+            Assert.AreEqual(5, testClues.GetClueLength(1,2));
         }
+
+        [Test()]
+        public void GetClueLengthReturnsCorrectLengthForColourClues()
+        {
+            Assert.AreEqual(17, colourClues.GetClueLength());
+        }
+
 
 
     }

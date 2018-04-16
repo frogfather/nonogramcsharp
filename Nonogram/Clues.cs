@@ -15,6 +15,11 @@ namespace Nonogram
             }
         }
 
+        public Clues()
+        {
+            //empty list
+        }
+
         public Clue getClue(int index)
         {
             if (index >= 0 && index < _clueList.Count)
@@ -28,7 +33,26 @@ namespace Nonogram
 
         }
 
-        public int getClueCount()
+        public void AddClue(Clue clue)
+        {
+            _clueList.Add(clue);
+        }
+
+        public Clue RemoveClue(int index)
+        {
+            if (index > 0 && index < _clueList.Count)
+            {
+                Clue selected = getClue(index);
+                _clueList.RemoveAt(index);
+                return selected;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public int GetClueCount()
         {
             return _clueList.Count;
         }
@@ -47,11 +71,23 @@ namespace Nonogram
         }
 
 
-        public int GetoverallClueLength()
+        public int GetClueLength(int startAt = 0, int endAt = -1)
         {
+            if (endAt == -1)
+            {
+                endAt = _clueList.Count;
+            }
+            if (endAt > _clueList.Count)
+            {
+                endAt = _clueList.Count;
+            }
+            if (startAt > endAt)
+            {
+                return 0;
+            }
             int totalLength = 0;
             string lastColour = "";
-            for (int i = 0; i < getClueCount(); i++)
+            for (int i = startAt; i < endAt; i++)
             {
                 totalLength += getClue(i).Number;
                 if (lastColour == getClue(i).Colour)

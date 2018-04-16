@@ -29,7 +29,7 @@ namespace Nonogram
 
                 for (int col = 0; col < currentGame.Cols().colCount(); col++)
                 {
-                    int currentColClueCount = currentGame.Cols().getClueSet(col).getClueCount();
+                    int currentColClueCount = currentGame.Cols().getClueSet(col).GetClueCount();
                     if (currentColClueCount >= maxColClueCount - i)
                     {
                         string clueValue = currentGame.Cols().getClueSet(col).getClue(i - (maxColClueCount - currentColClueCount)).Number.ToString();
@@ -55,7 +55,7 @@ namespace Nonogram
                 //for each row, if the number of clues is < maxRow we fill with spaces
                 for (int i = 0; i < maxRowClueCount; i++)
                 {
-                    int currentRowClueCount = currentGame.Rows().getClueSet(row).getClueCount();
+                    int currentRowClueCount = currentGame.Rows().getClueSet(row).GetClueCount();
                     if (currentRowClueCount >= (maxRowClueCount - i))
                     {
                         string clueValue = currentGame.GetClueSetRow(row).getClue(i - (maxRowClueCount - currentRowClueCount)).Number.ToString();

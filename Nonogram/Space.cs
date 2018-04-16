@@ -8,7 +8,7 @@ namespace Nonogram
         {
             SpaceLength = options.length;
             SpaceStart = options.start;
-            _spaceClues = new List<Clue>();
+            _spaceClues = new Clues();
         }
 
         public int SpaceLength
@@ -23,30 +23,29 @@ namespace Nonogram
             set;
         }
 
-        public int GetClueCount() => _spaceClues.Count;
+        public int GetClueCount() => _spaceClues.GetClueCount();
 
         public void AddClue(Clue clue)
         {
-            if (!_spaceClues.Contains(clue))
-            {
-                _spaceClues.Add(clue);
-            }
+            _spaceClues.AddClue(clue);
+        }
+
+        public Clue RemoveClue(int index)
+        {
+            return _spaceClues.RemoveClue(index);
         }
 
         public Clue GetClue(int index)
         {
-            if (index > -1 && index < _spaceClues.Count)
-            {
-                return _spaceClues[index];
-            }
-            else
-            {
-                return null;
-            }
+            return _spaceClues.getClue(index);
         }
 
+        public int GetClueLength()
+        {
+            return _spaceClues.GetClueLength();
+        }
 
-        List<Clue> _spaceClues;
+        Clues _spaceClues;
 
     }
 }
