@@ -81,7 +81,7 @@ namespace Nonogram
             return solved;
         }
 
-        private static bool CluesWillFitInSpaces(Clues clues, Spaces spaces)
+        private static bool CluesWillFitInSpaces(Clues clues, Spaces spaces, Blocks blocks)
         {
 
             List<Space> spaceList = new List<Space>();
@@ -123,6 +123,37 @@ namespace Nonogram
 
             }
 
+
+            return false;
+        }
+
+        private static bool CluesWillFitInSpace(Space space, Blocks blocks)
+        {
+            //this takes a single space and checks if the clues will fit in it
+            //if there is a block in the space then this needs taken into account too
+            if (space.GetClueLength()>space.SpaceLength)
+            {
+                return false;
+            }
+            //make a list of strings to represent the space
+            //fill it with " "
+            List<string> spaceModel = new List<string>();
+            for (int i = 0; i < space.SpaceLength;i++)
+            {
+                spaceModel.Add(" ");
+            }
+            //now add any blocks that are within this space
+            foreach(Block block in blocks)
+            {
+                if(block.BlockStart >= space.SpaceStart && block.BlockStart < space.SpaceStart+space.SpaceLength)
+                {
+                    for (int i = block.BlockStart; i< block.BlockStart+block.BlockLength,i++)
+                    {
+                        spaceModel[i] = block.BlockColour;
+                    }
+                }
+            }
+            //now what?
 
             return false;
         }
