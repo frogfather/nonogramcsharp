@@ -131,29 +131,93 @@ namespace Nonogram
         {
             //this takes a single space and checks if the clues will fit in it
             //if there is a block in the space then this needs taken into account too
-            if (space.GetClueLength()>space.SpaceLength)
+            if (space.GetClueLength() > space.SpaceLength)
             {
                 return false;
             }
+
+            if (blocks.getBlockCount() = 0)
+            {
+                if (space.SpaceLength >= space.GetClueLength())
+                {
+                    return true;
+                }
+            }
+
+            //if we've got this far there are blocks and things get complicated.
+
             //make a list of strings to represent the space
             //fill it with " "
-            List<string> spaceModel = new List<string>();
-            for (int i = 0; i < space.SpaceLength;i++)
+            List<string> spaceModel = new List<string>(); //set this up with the arrangement of blocks
+            List<string> testModel = new List<string>(); //we put our clues in here
+            for (int i = 0; i < space.SpaceLength; i++)
             {
-                spaceModel.Add(" ");
+                spaceModel.Add("clear");
+                testModel.Add("clear");
             }
             //now add any blocks that are within this space
-            foreach(Block block in blocks)
+            foreach (Block block in blocks)
             {
-                if(block.BlockStart >= space.SpaceStart && block.BlockStart < space.SpaceStart+space.SpaceLength)
+                if (block.BlockStart >= space.SpaceStart && block.BlockStart < space.SpaceStart + space.SpaceLength)
                 {
-                    for (int i = block.BlockStart; i< block.BlockStart+block.BlockLength,i++)
+                    for (int i = block.BlockStart; i < block.BlockStart + block.BlockLength; i++)
                     {
                         spaceModel[i] = block.BlockColour;
                     }
                 }
             }
-            //now what?
+            //arrange the clues to cover the blocks if possible
+            int blockNo = 0;
+            int blockLength = blocks.getBlock(blockNo).BlockLength;
+            int blockStart = blocks.getBlock(blockNo).BlockStart;
+            string blockColour = blocks.getBlock(blockNo).BlockColour;
+            string lastBlockColour;
+            int clueStart;
+            int clueLength;
+            int firstFreeSpace = 0;
+            string clueColour;
+            bool cluesDoFit = false;
+
+            for (int clueNo = 0; clueNo < space.GetClueCount(); clueNo++)
+            {
+                //get the length of the clue and the length of the block
+                //if block is longer then fail
+                //we want to start as far left as possible while still covering the end of the block
+                //need to keep track of where the end of the current clue is
+                clueLength = space.GetClue(clueNo).Number;
+                clueColour = space.GetClue(clueNo).Colour;
+                while (clueColour != blockColour || blockLength > clueLength) 
+                {
+                    firstFreeSpace = blockStart + blockLength; //move the marker past the current block
+                    //find a block that is the same colour and size (or smaller) than the current clue
+                    if (blockNo < blocks.getBlockCount() - 1)
+                    {
+                        blockNo += 1;
+                        blockLength = blocks.getBlock(blockNo).BlockLength;
+                        blockStart = blocks.getBlock(blockNo).BlockStart;
+                        blockColour = blocks.getBlock(blockNo).BlockColour;
+                    }
+                }
+
+
+
+                {
+                    clueStart = blockStart - (clueLength - blockLength);
+                    if (clueStart < firstFreeSpace){ clueStart = firstFreeSpace; }
+
+                    if (clueStart + clueLength > space.SpaceLength) { return false;} //out of bounds
+                }
+
+                if (clueNo > 0 && space.GetClue(clueNo - 1).Colour == space.GetClue(clueNo).Colour)
+                {
+                    clueStart += 1;
+                }
+
+
+
+            }
+
+
 
             return false;
         }
