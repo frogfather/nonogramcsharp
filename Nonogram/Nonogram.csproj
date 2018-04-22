@@ -53,6 +53,7 @@
     <Compile Include="Space.cs" />
     <Compile Include="Spaces.cs" />
     <Compile Include="SpaceData.cs" />
+    <Compile Include="Tests\CluesWillFitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
