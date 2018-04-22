@@ -81,7 +81,7 @@ namespace Nonogram
             return solved;
         }
 
-        private static bool CluesWillFitInSpaces(Clues clues, Spaces spaces, Blocks blocks)
+        public static bool CluesWillFitInSpaces(Clues clues, Spaces spaces, Blocks blocks)
         {
 
             List<Space> spaceList = new List<Space>();
@@ -97,117 +97,126 @@ namespace Nonogram
                 clueList.Add(clue);
             }
 
-            bool matchFound = false;
             bool finished = false;
             while (!finished)
 
             {
                 //move the next clue into the last space
-                spaceList[spaceList.Count].AddClue(clueList[0]);
                 if (clueList.Count > 0)
                 {
+                    spaceList[spaceList.Count - 1].AddClue(clueList[0]);
                     clueList.RemoveAt(0);    
                 }
 
                 for (int i = spaceList.Count - 1; i >= 0;i--)
                 {
                     // for each space, if the clues are too long to fit, move the first one out
-                    //need to adjust this in case more than one clue needs moved out!
-                    if (spaceList[i].GetClueLength() > spaceList[i].SpaceLength && i > 0)
+                    while (!CluesWillFitInSpace(spaceList[i],blocks))
                     {
-                        //we need to move the first clue to the next space
-                        spaceList[i - 1].AddClue(spaceList[i].RemoveClue(0));
+                        //we need to move the first clue to the next space. If we're in space0 we can't and the test fails
+                        if (i == 0) { return false; }
+                        spaceList[i - 1].AddClue(spaceList[i].RemoveClue(0));    
 
                     }
                 }
-
+                finished = clueList.Count == 0;
             }
 
-
-            return false;
+            return true;
         }
 
         private static bool CluesWillFitInSpace(Space space, Blocks blocks)
         {
             //this takes a single space and checks if the clues will fit in it
             //if there is a block in the space then this needs taken into account too
+            int startPos = 0;
             if (space.GetClueLength() > space.SpaceLength)
             {
                 return false;
             }
 
-            if (blocks.getBlockCount() == 0)
-            {
-                if (space.SpaceLength >= space.GetClueLength())
-                {
-                    return true;
-                }
+            if (blocks.getBlockCount() == 0 && space.SpaceLength >= space.GetClueLength())
+            {                
+                return true;
             }
 
             //if we've got this far there are blocks and things get complicated.
-
-            //arrange the clues to cover the blocks if possible
-            int blockNo = 0;
-            int blockLength = blocks.getBlock(0).BlockLength;
-            int blockStart = blocks.getBlock(0).BlockStart;
-            int clueStart = 0;
-            int clueLength;
-
-            string blockColour = blocks.getBlock(0).BlockColour;
-            string clueColour;
-            string lastClueColour = "none";
-            bool clueFits;
+            string lastClueColour = "";
 
             for (int clueNo = 0; clueNo < space.GetClueCount(); clueNo++)
             {
+                //new method find clue position - returns clue position if clue fits and -1 if it cannot
+                if (lastClueColour == space.GetClue(clueNo).Colour) { startPos += 1; }
+                startPos = ClueFitPosition(space, blocks, clueNo, startPos);
+                if (startPos == -1){ return false; }
+                // if the clue fits update the start position
+                startPos += space.GetClue(clueNo).Number;
+                lastClueColour = space.GetClue(clueNo).Colour;
+            }
+            //if we get out of the loop above then the clues all fit
+            return true;
+        }
 
-                clueLength = space.GetClue(clueNo).Number;
-                clueColour = space.GetClue(clueNo).Colour;
-                clueFits = false;
-
-                if (lastClueColour == clueColour) { clueStart += 1; } //same colours need a space between
-
-                if (clueStart + clueLength -1 < blockStart)
+        private static int ClueFitPosition(Space space, Blocks blocks, int clueNo, int startPos)
+        {
+            int endPos;
+            int fitPosition = -1;
+            bool outOfRange = false;
+            // can the specified clue fit into the space at all. 
+            // if yes, return position, if not return -1
+            if (clueNo >= space.GetClueCount()) { return -1; }
+            if (startPos >= space.SpaceLength) { return -1; }
+            if (blocks.getBlockCount() == 0 && space.GetClue(clueNo).Number < space.SpaceLength) { return startPos; }
+            //is space before startPos occupied by a block?
+            foreach (Block block in blocks)
+            {
+                if (block.BlockStart+block.BlockLength-1 == startPos -1 && block.BlockColour == space.GetClue(clueNo).Colour)
                 {
-                    
+                    startPos += 1;
                 }
+            }
+            //that gives the start position. Now see if the clue can fit either in free space or by overlapping a block
 
-
-                while ((clueColour != blockColour || blockLength > clueLength) && (blockNo < blocks.getBlockCount()))
+            foreach (Block block in blocks)
+            {
+                endPos = startPos + space.GetClue(clueNo).Number - 1; //last space filled by the clue
+                //is there a block at that position?
+                if (block.BlockStart <= endPos + 1 && block.BlockStart+block.BlockLength > endPos)
                 {
-                    clueStart = blockStart + blockLength; //the start of the clue is the first free space after the block
-                    if (clueColour == blockColour) { clueStart += 1; }//if the block is the same colour as the clue we need a space between
-
-                    blockNo += 1;
-                    if (blockNo < blocks.getBlockCount())
-                    {
-                        blockLength = blocks.getBlock(blockNo).BlockLength;
-                        blockStart = blocks.getBlock(blockNo).BlockStart;
-                        blockColour = blocks.getBlock(blockNo).BlockColour;
+                    //block either touching or overlapping our clue
+                    if (block.BlockStart == endPos+1 && block.BlockColour != space.GetClue(clueNo).Colour)
+                    {                        
+                        //block starts one space after clue but they are different colours so this is legal
+                        break;
                     }
                     else
-                    {
-                        blockColour = "none";
+                    {                        
+                        //if the block is the same colour see if we can overlap
+                        if (block.BlockColour == space.GetClue(clueNo).Colour)
+                        {
+                            if (block.BlockLength <= space.GetClue(clueNo).Number)
+                            {
+                                //block smaller or same size as clue. Arrange clue so end of clue == end of block
+                                startPos = block.BlockStart - (space.GetClue(clueNo).Number - block.BlockLength);
+                            }
+                            else
+                            {
+                                //block is longer than clue. Cannot overlap Move startpos to end of block + 1
+                                startPos = block.BlockStart + block.BlockLength + 1;
+                            }
+                        }
+                        else
+                        {
+                            //block is a different colour. Move startpos to the end of the block touching it
+                            startPos = block.BlockStart + block.BlockLength;
+                        }
                     }
                 }
 
-
-                //now we should have the start position which may be before a block or after all the blocks
-                if ((blockColour != "none") && (clueStart + clueLength < blockStart + blockLength))
-                {                    
-                    clueStart = blockStart - (clueLength - blockLength);
-                }
-
-                //the clue is placed. If it's on a block we know it covers that block
-                if ((clueStart + clueLength - 1) > space.SpaceLength) { return false; } //out of bounds
-
-                clueStart += clueLength;
-                if (blockNo < blocks.getBlockCount() - 1) { blockNo += 1; }
-
-                lastClueColour = clueColour;
             }
-
-            return false;
+            fitPosition = startPos;
+            if (startPos + space.GetClue(clueNo).Number > space.SpaceLength) { fitPosition = -1; }                        
+            return fitPosition;
         }
 
         private static bool Update(Grid grid, int col, int row, string value)
