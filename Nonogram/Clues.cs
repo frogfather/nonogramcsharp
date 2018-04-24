@@ -75,11 +75,11 @@ namespace Nonogram
         {
             if (endAt == -1)
             {
-                endAt = _clueList.Count;
+                endAt = _clueList.Count-1;
             }
-            if (endAt > _clueList.Count)
+            if (endAt > _clueList.Count-1)
             {
-                endAt = _clueList.Count;
+                endAt = _clueList.Count-1;
             }
             if (startAt > endAt)
             {
@@ -87,7 +87,7 @@ namespace Nonogram
             }
             int totalLength = 0;
             string lastColour = "";
-            for (int i = startAt; i < endAt; i++)
+            for (int i = startAt; i <= endAt; i++)
             {
                 totalLength += getClue(i).Number;
                 if (lastColour == getClue(i).Colour)

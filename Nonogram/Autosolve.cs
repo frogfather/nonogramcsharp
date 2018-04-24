@@ -29,6 +29,7 @@ namespace Nonogram
             int totalSolvedCells = 0;
             int solvedThisRound = 0;
 
+            Overlap(gameToSolve);
             //we want to recursively call all the methods until the number of 
             //solved cells is 0.
             //Overlap
@@ -45,40 +46,68 @@ namespace Nonogram
             //this iterates through each row and column in the game
             //and checks for points where cells must be filled in
             int elementLength = gameToSolve.Grid().GetLength(true); //number of rows
-
+            Console.WriteLine("Rows: ");
             for (int element = 0; element < elementLength; element++)
             {
                 Clues currentElementClues = gameToSolve.Rows().getClueSet(element);
                 Blocks currentElementBlocks = gameToSolve.Grid().GetBlocks(element, true);
                 Spaces currentSpaces = gameToSolve.Grid().GetSpaces(element, true);
 
-                solved = CellRowOverlap(gameToSolve.Grid(), currentElementClues, element, elementLength, true);
+                solved = IdentifyFilledCells(gameToSolve.Grid(), currentElementClues, currentElementBlocks, element, elementLength, true);
+                Console.WriteLine("Solved on row "+element+": "+solved);
                 totalSolved += solved;
                 solved = 0;
             }
 
             elementLength = gameToSolve.Grid().GetLength(false); //number of columns
+            Console.WriteLine("Columns: ");
             for (int element = 0; element < elementLength; element++)
             {
                 Clues currentElementClues = gameToSolve.Cols().getClueSet(element);
-                Blocks currentElementBlocks = gameToSolve.Grid().GetBlocks(element, true);
-                Spaces currentSpaces = gameToSolve.Grid().GetSpaces(element, true);
+                Blocks currentElementBlocks = gameToSolve.Grid().GetBlocks(element, false);
+                Spaces currentSpaces = gameToSolve.Grid().GetSpaces(element, false);
 
-                solved = CellRowOverlap(gameToSolve.Grid(), currentElementClues, element, elementLength, false);
+                solved = IdentifyFilledCells(gameToSolve.Grid(), currentElementClues, currentElementBlocks, element, elementLength, false);
+                Console.WriteLine("Solved on column " + element + ": " + solved);
                 totalSolved += solved;
                 solved = 0;
             }
             return totalSolved;
         }
 
-        private static int CellRowOverlap(Grid grid, Clues clues, int element, int elementLength, bool isRow)
+        private static int IdentifyFilledCells(Grid grid, Clues clues, Blocks blocks,int element, int elementLength, bool isRow)
         {
-            int solved = 0;
+            int filled = 0;
+            int firstFree = grid.GetFirstFreeCell(element,isRow);
+            int lastFree = grid.GetLastFreeCell(element, isRow);
+            for (int clueNo = 0; clueNo < clues.GetClueCount(); clueNo++)
+            {
+                //this needs adapted to take account of filled cells
+                int endClueLeft = firstFree-1 + clues.GetClueLength(0, clueNo);
+                int startClueRight = lastFree +1 - clues.GetClueLength(clueNo, clues.GetClueCount()-1);
+                if (startClueRight <= endClueLeft)
+                {
+                    for (int cellNo = startClueRight; cellNo <= endClueLeft;cellNo++)
+                    {
+                        int rowToUpdate;
+                        int colToUpdate;
+                        if (isRow)
+                        {
+                            rowToUpdate = element;
+                            colToUpdate = cellNo;
+                        }
+                        else
+                        {
+                            rowToUpdate = cellNo;
+                            colToUpdate = element;
+                        }
+                        if (Update(grid, colToUpdate, rowToUpdate, clues.getClue(clueNo).Colour)) { filled += 1; }
+                    }
+                }
+            }
 
 
-            //this method has not been written yet
-
-            return solved;
+            return filled;
         }
 
         public static bool CluesWillFitInSpaces(Clues clues, Spaces spaces, Blocks blocks)
@@ -161,7 +190,6 @@ namespace Nonogram
         {
             int endPos;
             int fitPosition = -1;
-            bool outOfRange = false;
             // can the specified clue fit into the space at all. 
             // if yes, return position, if not return -1
             if (clueNo >= space.GetClueCount()) { return -1; }
@@ -212,7 +240,6 @@ namespace Nonogram
                         }
                     }
                 }
-
             }
             fitPosition = startPos;
             if (startPos + space.GetClue(clueNo).Number > space.SpaceLength) { fitPosition = -1; }                        
