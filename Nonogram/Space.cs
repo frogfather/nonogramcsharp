@@ -47,7 +47,7 @@ namespace Nonogram
 
         public int GetClueLength()
         {
-            return Utilities.GetClueLength(GetClues());
+            return _spaceClues.GetClueLength();
         }
 
         Clues _spaceClues;

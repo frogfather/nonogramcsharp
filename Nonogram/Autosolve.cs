@@ -83,8 +83,8 @@ namespace Nonogram
             for (int clueNo = 0; clueNo < clues.GetClueCount(); clueNo++)
             {
                 //this needs adapted to take account of filled cells
-                int endClueLeft = firstFree-1 + Utilities.GetClueLength(clues,0, clueNo);
-                int startClueRight = lastFree +1 - Utilities.GetClueLength(clues, clueNo, clues.GetClueCount()-1);
+                int endClueLeft = firstFree-1 + clues.GetClueLength(0, clueNo);
+                int startClueRight = lastFree +1 - clues.GetClueLength(clueNo, clues.GetClueCount()-1);
                 if (startClueRight <= endClueLeft)
                 {
                     for (int cellNo = startClueRight; cellNo <= endClueLeft;cellNo++)

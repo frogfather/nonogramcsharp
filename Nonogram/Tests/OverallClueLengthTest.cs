@@ -29,19 +29,19 @@ namespace Nonogram.Tests
         [Test()]
         public void GetClueLengthReturnsCorrectLength()
         {
-            Assert.AreEqual(12, Utilities.GetClueLength(testClues));
+            Assert.AreEqual(12, testClues.GetClueLength());
         }
 
         [Test()]
         public void GetClueLengthReturnsCorrectLengthForSubrange()
         {
-            Assert.AreEqual(9, Utilities.GetClueLength(testClues,1,2));
+            Assert.AreEqual(9, testClues.GetClueLength(1,2));
         }
 
         [Test()]
         public void GetClueLengthReturnsCorrectLengthForColourClues()
         {
-            Assert.AreEqual(17, Utilities.GetClueLength(colourClues));
+            Assert.AreEqual(17, colourClues.GetClueLength());
         }
 
 
