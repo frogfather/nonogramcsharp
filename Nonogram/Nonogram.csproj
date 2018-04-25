@@ -54,6 +54,7 @@
     <Compile Include="Spaces.cs" />
     <Compile Include="SpaceData.cs" />
     <Compile Include="Tests\CluesWillFitTests.cs" />
+    <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

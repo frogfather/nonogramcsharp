@@ -40,9 +40,14 @@ namespace Nonogram
             return _spaceClues.getClue(index);
         }
 
+        public Clues GetClues()
+        {
+            return _spaceClues;
+        }
+
         public int GetClueLength()
         {
-            return _spaceClues.GetClueLength();
+            return Utilities.GetClueLength(GetClues());
         }
 
         Clues _spaceClues;

@@ -71,35 +71,6 @@ namespace Nonogram
         }
 
 
-        public int GetClueLength(int startAt = 0, int endAt = -1)
-        {
-            if (endAt == -1)
-            {
-                endAt = _clueList.Count-1;
-            }
-            if (endAt > _clueList.Count-1)
-            {
-                endAt = _clueList.Count-1;
-            }
-            if (startAt > endAt)
-            {
-                return 0;
-            }
-            int totalLength = 0;
-            string lastColour = "";
-            for (int i = startAt; i <= endAt; i++)
-            {
-                totalLength += getClue(i).Number;
-                if (lastColour == getClue(i).Colour)
-                {
-                    totalLength += 1;
-                }
-                lastColour = getClue(i).Colour;
-            }
-            return totalLength;
-        }
-
-
         private List<Clue> _clueList = new List<Clue>();
     }
 }
