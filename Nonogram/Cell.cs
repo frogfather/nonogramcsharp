@@ -8,6 +8,7 @@ namespace Nonogram
             _row = row;
             _column = column;
             _userValue = "clear";
+            AutoValue = "clear";
         }
 
         public int CellColumn

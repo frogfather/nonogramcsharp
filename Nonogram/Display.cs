@@ -86,7 +86,11 @@ namespace Nonogram
 
                     if (selValue == "black")
                     {
-                        rowToPrint += "\u25A3 ";
+                        rowToPrint += "\u25A0 ";
+                    }
+                    else if (selValue == "cross")
+                    {
+                        rowToPrint += "\u25A7 ";
                     }
                     else
                     {
