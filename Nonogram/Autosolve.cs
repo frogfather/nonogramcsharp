@@ -10,15 +10,11 @@ namespace Nonogram
 
         //LayoutIsLegal - compares supplied layout to ref one. Need to remember how this worked
         //LargestBlockEqualsLargestClue (uses getBlockInfo)
-        //GetDistinctSpaces (needs amended for coloured puzzles)
         //GetSpaceRound
         //BlocksMapToClues
-        //CluesWillFit
         //ClueDistribution
         //IdentifyBlocks
-        //SingleClue
-        //EdgeProximity
-        //Overlap - we have this, but without considering blocks. Maybe that's ok
+
 
         public static void Solve(Game gameToSolve)
         {
@@ -29,6 +25,8 @@ namespace Nonogram
             solvedThisRound += MethodRunner(gameToSolve,"Overlap");
             Console.WriteLine("Single clue");
             solvedThisRound = MethodRunner(gameToSolve,"SingleClue");
+            Console.WriteLine("Edge Proximity");
+            solvedThisRound = MethodRunner(gameToSolve, "EdgeProximity");
             totalSolvedCells += solvedThisRound;
 
             //loop if solvedthisround > 0
@@ -74,6 +72,9 @@ namespace Nonogram
                         case "SingleClue":
                             solved = SingleClue(gameToSolve.Grid(), currentElementClues, currentElementBlocks, element, elementLength, isRow);
                             break;
+                        case "EdgeProximity":
+                            solved = EdgeProximity(gameToSolve.Grid(), currentElementClues, currentElementBlocks, element, elementLength, isRow);
+                            break;
                         default:
                             Console.WriteLine("unknown method called");
                             break;
@@ -113,8 +114,6 @@ namespace Nonogram
                     }
                 }
             }
-
-
             return filled;
         }
 
@@ -149,7 +148,49 @@ namespace Nonogram
             }
             return filled;
         }
-        
+
+        public static int EdgeProximity(Grid grid, Clues clues, Blocks blocks, int element, int elementLength, bool isRow)
+        {
+            int filled = 0;
+            int rowToUpdate;
+            int colToUpdate;
+            bool atStart = true;
+            int fillFrom =-1;
+            int fillTo = -1;
+            //Cross out cells which logically cannot be filled because there's too big a gap between the first block and the edge of the element.
+            if (blocks.getBlockCount() > 0 && clues.GetClueCount()>0)
+            {
+                for (int loopCount = 0; loopCount < 2; loopCount++)
+                {
+                    if (atStart && blocks.getBlock(0).BlockColour ==clues.getClue(0).Colour)
+                    {
+                        fillFrom = blocks.getBlock(0).BlockStart - clues.getClue(0).Number;
+                        fillTo =   fillFrom + blocks.getBlock(0).BlockLength - 1;
+                        fillFrom = (fillFrom < 0) ? 0 : fillFrom;
+
+                    }
+                    else if (!atStart && blocks.getBlock(blocks.getBlockCount()-1).BlockColour == clues.getClue(clues.GetClueCount()-1).Colour)
+                    {
+                        fillFrom = blocks.getBlock(blocks.getBlockCount()-1).BlockStart + clues.getClue(clues.GetClueCount()-1).Number;
+                        fillTo = fillFrom + blocks.getBlock(blocks.getBlockCount()-1).BlockLength;
+                        fillTo = (fillTo > elementLength-1) ? elementLength-1 : fillTo;
+                    }
+
+                    if ((fillFrom == 0 && fillTo >= 0)||(fillTo == elementLength && fillFrom <= elementLength))
+                    {
+                        for (int cellNo = fillFrom; cellNo <= fillTo;cellNo++)
+                        {
+                            rowToUpdate = (isRow) ? element : cellNo;
+                            colToUpdate = (isRow) ? cellNo : element;
+                            if (Update(grid, colToUpdate, rowToUpdate, "cross")) { filled += 1; }
+                        }
+                    }
+                    atStart = false;
+                }
+            }
+            return filled;
+        }
+
 
         public static bool CluesWillFitInSpaces(Clues clues, Spaces spaces, Blocks blocks)
         {
