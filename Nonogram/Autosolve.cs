@@ -26,103 +26,78 @@ namespace Nonogram
             int totalSolvedCells = 0;
             int solvedThisRound = 0;
             Console.WriteLine("Overlap: ");
-            Overlap(gameToSolve);
+            solvedThisRound += MethodRunner(gameToSolve,"Overlap");
             Console.WriteLine("Single clue");
-            SingleClue(gameToSolve);
-            //we want to recursively call all the methods until the number of 
-            //solved cells is 0.
-            //Overlap - are there some cells that must be filled regardless of where the clues go?
+            solvedThisRound = MethodRunner(gameToSolve,"SingleClue");
+            totalSolvedCells += solvedThisRound;
+
+            //loop if solvedthisround > 0
+            solvedThisRound = 0;
             //Edge Proximity 
-            //Single Clue - is there only one clue?
             //Identify Blocks
-
         }
 
-        private static int Overlap(Game gameToSolve)
+        private static int MethodRunner(Game gameToSolve, String methodToCall)
         {
+            //handles iteration through all rows and columns using the requested method
             int totalSolved = 0;
             int solved = 0;
-            //this iterates through each row and column in the game
-            //and checks for points where cells must be filled in
-            int elementLength = gameToSolve.Grid().GetLength(true); //number of rows
-            Console.WriteLine("Rows: ");
-            for (int element = 0; element < elementLength; element++)
+            int elementLength;
+            bool isRow = true;
+            string elementType = "row";
+            Clues currentElementClues;
+            Blocks currentElementBlocks;
+            Spaces currentSpaces;
+
+            for (int loopCount = 0; loopCount < 2; loopCount++)
             {
-                Clues currentElementClues = gameToSolve.Rows().getClueSet(element);
-                Blocks currentElementBlocks = gameToSolve.Grid().GetBlocks(element, true);
-                Spaces currentSpaces = gameToSolve.Grid().GetSpaces(element, true);
-
-                solved = IdentifyFilledCells(gameToSolve.Grid(), currentElementClues, currentElementBlocks, element, elementLength, true);
-                Console.WriteLine("Solved on row "+element+": "+solved);
-                totalSolved += solved;
-                solved = 0;
-            }
-
-            elementLength = gameToSolve.Grid().GetLength(false); //number of columns
-            Console.WriteLine("Columns: ");
-            for (int element = 0; element < elementLength; element++)
-            {
-                Clues currentElementClues = gameToSolve.Cols().getClueSet(element);
-                Blocks currentElementBlocks = gameToSolve.Grid().GetBlocks(element, false);
-                Spaces currentSpaces = gameToSolve.Grid().GetSpaces(element, false);
-
-                solved = IdentifyFilledCells(gameToSolve.Grid(), currentElementClues, currentElementBlocks, element, elementLength, false);
-                Console.WriteLine("Solved on column " + element + ": " + solved);
-                totalSolved += solved;
-                solved = 0;
-            }
-            return totalSolved;
-        }
-
-        private static int SingleClue(Game gameToSolve)
-        {
-            int totalSolved = 0;
-            int solved = 0;
-            //this iterates through each row and column in the game
-            //and checks for points where cells must be filled in
-            int elementLength = gameToSolve.Grid().GetLength(true); //number of rows
-            Console.WriteLine("Rows: ");
-            for (int element = 0; element < elementLength; element++)
-            {
-                Clues currentElementClues = gameToSolve.Rows().getClueSet(element);
-                Blocks currentElementBlocks = gameToSolve.Grid().GetBlocks(element, true);
-                Spaces currentSpaces = gameToSolve.Grid().GetSpaces(element, true);
-
-                if (currentElementClues.GetClueCount() == 1 && currentElementBlocks.getBlockCount() >= 1)
+                elementLength = gameToSolve.Grid().GetLength(isRow); //number of rows
+                Console.WriteLine(elementType+": ");
+                for (int element = 0; element < elementLength; element++)
                 {
-                    solved = ProcessElementWithSingleClue(gameToSolve.Grid(), currentElementClues.getClue(0), currentElementBlocks, element, elementLength, true);
-                    Console.WriteLine("Solved on row " + element + ": " + solved);
+                    if (isRow)
+                    {
+                        currentElementClues = gameToSolve.Rows().getClueSet(element);    
+                    }
+                    else
+                    {
+                        currentElementClues = gameToSolve.Cols().getClueSet(element);
+                    }
+
+                    currentElementBlocks = gameToSolve.Grid().GetBlocks(element, isRow);
+                    currentSpaces = gameToSolve.Grid().GetSpaces(element, isRow);
+                    switch (methodToCall)
+                    {
+                        case "Overlap":
+                            solved = Overlap(gameToSolve.Grid(), currentElementClues, currentElementBlocks, element, elementLength, isRow);
+                            break;
+                        case "SingleClue":
+                            solved = SingleClue(gameToSolve.Grid(), currentElementClues, currentElementBlocks, element, elementLength, isRow);
+                            break;
+                        default:
+                            Console.WriteLine("unknown method called");
+                            break;
+                    }
+
+                    Console.WriteLine("Solved on "+elementType+ " " + element + ": " + solved);
                     totalSolved += solved;
                     solved = 0;
                 }
-
-            }
-
-            elementLength = gameToSolve.Grid().GetLength(false); //number of columns
-            Console.WriteLine("Columns: ");
-            for (int element = 0; element < elementLength; element++)
-            {
-                Clues currentElementClues = gameToSolve.Cols().getClueSet(element);
-                Blocks currentElementBlocks = gameToSolve.Grid().GetBlocks(element, false);
-                Spaces currentSpaces = gameToSolve.Grid().GetSpaces(element, false);
-
-                if (currentElementClues.GetClueCount() == 1 && currentElementBlocks.getBlockCount()>=1)
-                {
-                    solved = ProcessElementWithSingleClue(gameToSolve.Grid(), currentElementClues.getClue(0), currentElementBlocks, element, elementLength, false);
-                    Console.WriteLine("Solved on row " + element + ": " + solved);
-                    totalSolved += solved;
-                    solved = 0;
-                }
+                isRow = false;
+                elementType = "column";
             }
             return totalSolved;
         }
 
 
-        private static int IdentifyFilledCells(Grid grid, Clues clues, Blocks blocks,int element, int elementLength, bool isRow)
+        private static int Overlap(Grid grid, Clues clues, Blocks blocks,int element, int elementLength, bool isRow)
         {
             int filled = 0;
             int firstFree = grid.GetFirstFreeCell(element,isRow);
             int lastFree = grid.GetLastFreeCell(element, isRow);
+            int rowToUpdate;
+            int colToUpdate;
+
             for (int clueNo = 0; clueNo < clues.GetClueCount(); clueNo++)
             {
                 //this needs adapted to take account of filled cells
@@ -132,18 +107,8 @@ namespace Nonogram
                 {
                     for (int cellNo = startClueRight; cellNo <= endClueLeft;cellNo++)
                     {
-                        int rowToUpdate;
-                        int colToUpdate;
-                        if (isRow)
-                        {
-                            rowToUpdate = element;
-                            colToUpdate = cellNo;
-                        }
-                        else
-                        {
-                            rowToUpdate = cellNo;
-                            colToUpdate = element;
-                        }
+                        rowToUpdate = (isRow) ? element : cellNo;
+                        colToUpdate = (isRow) ? cellNo : element;
                         if (Update(grid, colToUpdate, rowToUpdate, clues.getClue(clueNo).Colour)) { filled += 1; }
                     }
                 }
@@ -153,36 +118,34 @@ namespace Nonogram
             return filled;
         }
 
-        private static int ProcessElementWithSingleClue(Grid grid, Clue clue, Blocks blocks, int element, int elementLength, bool isRow)
+        private static int SingleClue(Grid grid, Clues clues, Blocks blocks, int element, int elementLength, bool isRow)
         {
             int filled = 0;
+            int blocksStart;
+            int blocksEnd;
+            int rowToUpdate;
+            int colToUpdate;
+            Clue clue;
             //we know there is only one clue. If there is more than one block then the space between them must be filled in.
-            int blocksStart = blocks.getBlock(0).BlockStart;
-            int blocksEnd = blocks.getBlock(blocks.getBlockCount() - 1).BlockStart + blocks.getBlock(blocks.getBlockCount() - 1).BlockLength-1;
-            for (int cellNo = grid.GetFirstFreeCell(element,isRow); cellNo <= grid.GetLastFreeCell(element,isRow);cellNo++)
+            if(blocks.getBlockCount()>0 && clues.GetClueCount() == 1)
             {
-                int rowToUpdate;
-                int colToUpdate;
+                blocksStart = blocks.getBlock(0).BlockStart;
+                blocksEnd = blocks.getBlock(blocks.getBlockCount() - 1).BlockStart + blocks.getBlock(blocks.getBlockCount() - 1).BlockLength - 1;
+                clue = clues.getClue(0);
+                for (int cellNo = grid.GetFirstFreeCell(element, isRow); cellNo <= grid.GetLastFreeCell(element, isRow); cellNo++)
+                {
+                    rowToUpdate = (isRow) ? element : cellNo;
+                    colToUpdate = (isRow) ? cellNo : element;
 
-                if (isRow)
-                {
-                    rowToUpdate = element;
-                    colToUpdate = cellNo;
+                    if (cellNo >= blocksStart && cellNo <= blocksEnd)
+                    {
+                        if (Update(grid, colToUpdate, rowToUpdate, clue.Colour)) { filled += 1; }
+                    }
+                    else if (cellNo < blocksEnd - clue.Number + 1 || cellNo > blocksStart + clue.Number - 1)
+                    {
+                        if (Update(grid, colToUpdate, rowToUpdate, "cross")) { filled += 1; }
+                    }
                 }
-                else
-                {
-                    rowToUpdate = cellNo;
-                    colToUpdate = element;
-                }
-                if (cellNo >=blocksStart && cellNo <= blocksEnd)
-                {
-                    if (Update(grid, colToUpdate, rowToUpdate, clue.Colour)) { filled += 1; }    
-                }
-                else if(cellNo < blocksEnd - clue.Number + 1 || cellNo > blocksStart + clue.Number - 1)
-                {
-                    if (Update(grid, colToUpdate, rowToUpdate, "cross")) { filled += 1; }    
-                }
-
             }
             return filled;
         }
