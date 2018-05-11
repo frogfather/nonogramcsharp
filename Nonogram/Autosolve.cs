@@ -20,18 +20,25 @@ namespace Nonogram
         {
             int cellsToSolve = gameToSolve.Grid().GetLength(true) * gameToSolve.Grid().GetLength(false);
             int totalSolvedCells = 0;
-            int solvedThisRound = 0;
-            Console.WriteLine("Overlap: ");
-            solvedThisRound += MethodRunner(gameToSolve,"Overlap");
-            Console.WriteLine("Single clue");
-            solvedThisRound = MethodRunner(gameToSolve,"SingleClue");
-            Console.WriteLine("Edge Proximity");
-            solvedThisRound = MethodRunner(gameToSolve, "EdgeProximity");
-            totalSolvedCells += solvedThisRound;
+            int solvedThisRound;
+            int loopCount = 0;
+            do
+            {
+                solvedThisRound = 0;
+                Console.WriteLine("Overlap: ");
+                solvedThisRound += MethodRunner(gameToSolve, "Overlap");
+                Console.WriteLine("Single clue");
+                solvedThisRound += MethodRunner(gameToSolve, "SingleClue");
+                Console.WriteLine("Edge Proximity");
+                solvedThisRound += MethodRunner(gameToSolve, "EdgeProximity");
+                totalSolvedCells += solvedThisRound;
+                loopCount += 1;
+                Console.WriteLine("End loop no "+loopCount);
+            } while (solvedThisRound > 0);
 
-            //loop if solvedthisround > 0
-            solvedThisRound = 0;
-            //Edge Proximity 
+
+
+
             //Identify Blocks
         }
 
@@ -191,6 +198,30 @@ namespace Nonogram
             return filled;
         }
 
+        public static void IdentifyBlocks(Grid grid, Clues clues, Blocks blocks, int element, int elementLength, bool isRow)
+        {
+            //we want to see which clues each block can be
+            //beware split blocks!
+            //Grid has a method to return a Blocks object
+            //this method needs to fill in the 'clues' array of each block with possible values
+            if (blocks.getBlockCount()>0 && !clues.AllCluesSolved())
+            {
+                foreach (Block block in blocks)
+                {
+                    foreach(Clue clue in clues)
+                    {
+                        //first, is the block bigger than the clue?
+                        //if so, can the clues before the current one fit before this block?
+                        //and can the clues after the current one fit after this block?
+                        if (block.BlockLength <= clue.Number)
+                        {
+                            
+                        }
+                    }
+                }
+                
+            }
+        }
 
         public static bool CluesWillFitInSpaces(Clues clues, Spaces spaces, Blocks blocks)
         {

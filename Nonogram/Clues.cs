@@ -70,6 +70,14 @@ namespace Nonogram
             return largestPos;
         }
 
+        public bool AllCluesSolved()
+        {
+            foreach(Clue clue in _clueList)
+            {
+                if (clue.Solved == false) { return false; }
+            }
+            return true;
+        }
 
         public int GetClueLength(int startAt = 0, int endAt = -1)
         {

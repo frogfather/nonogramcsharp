@@ -40,6 +40,15 @@ namespace Nonogram
             }
         }
 
+        public void RemoveClue(Clue clue)//need tests for this!
+        {
+            int cluePos = _blockClues.IndexOf(clue);
+                if (cluePos>-1)
+            {
+                _blockClues.RemoveAt(cluePos);
+            }
+        }
+
         public Clue GetClue(int index)
         {
             if (index > -1 && index < _blockClues.Count)
