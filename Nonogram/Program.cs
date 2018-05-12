@@ -56,12 +56,12 @@ namespace Nonogram
 
         static void SetChangeHandlers(Game currentGame)
         {
-            for (int i = 0; i < currentGame.Grid().GetLength(true); i++)
+            for (int colNo = 0; colNo < currentGame.Grid().GetLength(true); colNo++)
             {
-                for (int colNo = 0; colNo < currentGame.Grid().GetLength(false); colNo++)
+                for (int rowNo = 0; rowNo < currentGame.Grid().GetLength(false); rowNo++)
                 {
                     //+=OnValueChanged is equivalent to += new ValueChangedDelegate(OnValueChanged)
-                    currentGame.GetGridCellRow(i).GetCell(colNo).ValueChanged += OnValueChanged;
+                    currentGame.GetGridCellRow(rowNo).GetCell(colNo).ValueChanged += OnValueChanged;
                 }
             }
         }

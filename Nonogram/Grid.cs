@@ -34,6 +34,18 @@ namespace Nonogram
         {
             if (row)
             {
+                return GetColCount();
+            }
+            else
+            {
+                return GetRowCount();
+            }
+        }
+
+        public int GetCount(bool row)
+        {
+            if (row)
+            {
                 return GetRowCount();
             }
             else

@@ -40,16 +40,19 @@ namespace Nonogram
 
         public Clue RemoveClue(int index)
         {
-            if (index > 0 && index < _clueList.Count)
+            if (index >= 0 && index < _clueList.Count)
             {
                 Clue selected = getClue(index);
                 _clueList.RemoveAt(index);
                 return selected;
             }
-            else
-            {
-                return null;
-            }
+            return null;
+
+        }
+
+        public void RemoveAll()
+        {
+            _clueList.Clear();
         }
 
         public int GetClueCount()

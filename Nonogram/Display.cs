@@ -48,7 +48,7 @@ namespace Nonogram
             }
 
             //now print the row clues AND the grid row
-            for (int row = 0; row < currentGame.Grid().GetLength(true); row++)
+            for (int row = 0; row < currentGame.Grid().GetCount(true); row++)
             {
                 rowToPrint = "";
 
