@@ -208,55 +208,38 @@ namespace Nonogram
 
         public static void IdentifyBlocks(Grid grid, Clues clues, Blocks blocks, int element, int elementLength, bool isRow)
         {
-            //we want to see which clues each block can be
-            //beware split blocks!
-            //Grid has a method to return a Blocks object
-            //this method needs to fill in the 'clues' array of each block with possible values
             if (blocks.GetBlockCount()>0 && !clues.AllCluesSolved())
             {
-                //first, set up 2 sets of clues: one cluesBefore, one cluesAfter
                 Clues cluesBefore = new Clues();
                 Clues cluesAfter = new Clues();
                 Blocks blocksAfter = new Blocks();
                 Blocks blocksBefore = new Blocks();
+                int currentClueMaxEnd = -1; //furthest right the current clue can go and still legally match the current block.
+                int currentClueMinStart = -1; //furthest left the current clue can go and still legally match the current block;
                 blocksAfter.RemoveAll();
                 foreach(Block testBlock in blocks){blocksAfter.AddBlock(testBlock);}
-
+                //for each block, the only question we need to ask is 'can this block legally fit here?'
                 for (int blockNo = 0; blockNo < blocks.GetBlockCount();blockNo++)
                 {
                     if(blocksAfter.GetBlockCount()>0){blocksAfter.RemoveBlock(0);}
-
-                    if (blocksBefore.GetBlockCount() > 0)
-                    {
-                        Console.WriteLine("Previous blocks start " + blocksBefore.GetBlock(0).BlockStart);
-                    }
-
-                    Console.WriteLine("Previous blocks length " + blocksBefore.GetBlockLength());
-                    Console.WriteLine("Current block start " + blocks.GetBlock(blockNo).BlockStart);
-                    Console.WriteLine("Current block length " + blocks.GetBlock(blockNo).BlockLength);
-                    Console.WriteLine("Space after current block " + (elementLength - (blocks.GetBlock(blockNo).BlockStart + blocks.GetBlock(blockNo).BlockLength)));
-                    Console.WriteLine("Length of blocks after " + blocksAfter.GetBlockLength());
-                    Console.WriteLine("Space before current block " + blocks.GetBlock(blockNo).BlockStart);
-                    //for each block start with all the clues in cluesAfter
                     cluesAfter.RemoveAll();
                     cluesBefore.RemoveAll();
                     foreach (Clue testClue in clues){ cluesAfter.AddClue(testClue); }
-                    //all we're testing here is 'can this clue legally be this block?'
-                    //start by removing the current clue from cluesAfter
                     for (int clueNo = 0; clueNo < clues.GetClueCount(); clueNo++)
                     {                        
+                        currentClueMaxEnd = GetClueMatchPos(blocks.GetBlock(blockNo), clues, clueNo, true);
+                        //this returns the LAST space that the previous clues can fit into
+                        currentClueMinStart = GetClueMatchPos(blocks.GetBlock(blockNo), clues, clueNo, false);
+                        //this returns the FIRST space that the next clues can fit into
+
                         if (cluesAfter.GetClueCount() > 0) { cluesAfter.RemoveClue(0); }
                         if (blocks.GetBlock(blockNo).BlockLength <= clues.getClue(clueNo).Number)
                         {
-                            //what exactly do we want to test here?
-                            //cluesBefore need to fit into the space before the block
-                            //the current clue needs to fit over the block
-                            Console.WriteLine("Previous clues length " + cluesBefore.GetClueLength());
-
-                            Console.WriteLine("Length of current clue "+clues.getClue(clueNo).Number);
-
-                            Console.WriteLine("Length of clues after " + cluesAfter.GetClueLength());
-
+                            
+                        }
+                        else
+                        {
+                            Console.WriteLine("Clue "+ clueNo + " is shorter than current block");
                         }
                         cluesBefore.AddClue(clues.getClue(clueNo));
                     }
@@ -264,6 +247,47 @@ namespace Nonogram
                 }
                 
             }
+        }
+
+        public static bool CluesWillFitInSpace(int start, int end, Blocks blocks, Clues clues)
+        {            
+            if (clues.GetClueLength() < blocks.GetBlockLength()) { return false; } //blocks longer than clues
+            if (clues.GetClueLength() > end - start + 1) { return false;} // clues won't fit into this space
+            if (blocks.GetBlockCount() == 0) { return true; }
+            //will the provided clues fit in the specified space?
+            Dictionary<Clue, int> cluePositions = new Dictionary<Clue, int>();
+            //add the clues as close together as they'll fit. Start at length - cluelength
+            int startPos = end - start + 1 - clues.GetClueLength();
+            string prevColour = "none";
+            for (int i = 0; i < clues.GetClueCount();i++)
+            {
+                if (prevColour == clues.getClue(i).Colour) { startPos += 1; }
+                cluePositions.Add(clues.getClue(i),startPos);
+                startPos += clues.getClue(i).Number;
+                prevColour = clues.getClue(i).Colour;
+            }
+            //this sets things up. Now see if all clues are either in free space or entirely over blocks
+
+        }
+
+        public static int GetClueMatchPos(Block block, Clues clues, int clueId, bool start)
+        {
+            int positionToReturn = -1;
+
+            if (block.BlockLength > clues.getClue(clueId).Number) { positionToReturn = -1; }
+            if (block.BlockColour != clues.getClue(clueId).Colour) { positionToReturn = -1; }
+            if (start) 
+            { 
+                positionToReturn = block.BlockStart - 1;
+                if (clueId > 0 && clues.getClue(clueId).Colour == clues.getClue(clueId - 1).Colour) { positionToReturn -= 1;}
+            }
+            else
+            {
+                positionToReturn = block.BlockStart + block.BlockLength;
+                if (clueId < clues.GetClueCount() - 1 && clues.getClue(clueId).Colour == clues.getClue(clueId + 1).Colour) { positionToReturn += 1; }
+            }
+
+            return positionToReturn;
         }
 
         public static bool CluesWillFitInSpaces(Clues clues, Spaces spaces, Blocks blocks)
