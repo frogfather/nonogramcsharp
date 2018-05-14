@@ -36,7 +36,7 @@ namespace Nonogram
 
                 totalSolvedCells += solvedThisRound;
                 loopCount += 1;
-                Console.WriteLine("End loop no "+loopCount);
+                Console.WriteLine("End loop no " + loopCount);
             } while (solvedThisRound > 0);
 
 
@@ -60,14 +60,14 @@ namespace Nonogram
 
             for (int loopCount = 0; loopCount < 2; loopCount++)
             {
-                elementLength = gameToSolve.Grid().GetLength(isRow); 
-                elementCount = gameToSolve.Grid().GetCount(isRow); 
-                Console.WriteLine(elementType+": ");
+                elementLength = gameToSolve.Grid().GetLength(isRow);
+                elementCount = gameToSolve.Grid().GetCount(isRow);
+                Console.WriteLine(elementType + ": ");
                 for (int element = 0; element < elementCount; element++)
                 {
                     if (isRow)
                     {
-                        currentElementClues = gameToSolve.Rows().getClueSet(element);    
+                        currentElementClues = gameToSolve.Rows().getClueSet(element);
                     }
                     else
                     {
@@ -88,14 +88,14 @@ namespace Nonogram
                             solved = EdgeProximity(gameToSolve.Grid(), currentElementClues, currentElementBlocks, element, elementLength, isRow);
                             break;
                         case "IdentifyBlocks":
-                            IdentifyBlocks(gameToSolve.Grid(), currentElementClues, currentElementBlocks, element, elementLength,isRow);
+                            IdentifyBlocks(gameToSolve.Grid(), currentElementClues, currentElementBlocks, element, elementLength, isRow);
                             break;
                         default:
                             Console.WriteLine("unknown method called");
                             break;
                     }
 
-                    Console.WriteLine("Solved on "+elementType+ " " + element + ": " + solved);
+                    Console.WriteLine("Solved on " + elementType + " " + element + ": " + solved);
                     totalSolved += solved;
                     solved = 0;
                 }
@@ -106,10 +106,10 @@ namespace Nonogram
         }
 
 
-        private static int Overlap(Grid grid, Clues clues, Blocks blocks,int element, int elementLength, bool isRow)
+        private static int Overlap(Grid grid, Clues clues, Blocks blocks, int element, int elementLength, bool isRow)
         {
             int filled = 0;
-            int firstFree = grid.GetFirstFreeCell(element,isRow);
+            int firstFree = grid.GetFirstFreeCell(element, isRow);
             int lastFree = grid.GetLastFreeCell(element, isRow);
             int rowToUpdate;
             int colToUpdate;
@@ -117,11 +117,11 @@ namespace Nonogram
             for (int clueNo = 0; clueNo < clues.GetClueCount(); clueNo++)
             {
                 //this needs adapted to take account of filled cells
-                int endClueLeft = firstFree-1 + clues.GetClueLength(0, clueNo);
-                int startClueRight = lastFree +1 - clues.GetClueLength(clueNo, clues.GetClueCount()-1);
+                int endClueLeft = firstFree - 1 + clues.GetClueLength(0, clueNo);
+                int startClueRight = lastFree + 1 - clues.GetClueLength(clueNo, clues.GetClueCount() - 1);
                 if (startClueRight <= endClueLeft)
                 {
-                    for (int cellNo = startClueRight; cellNo <= endClueLeft;cellNo++)
+                    for (int cellNo = startClueRight; cellNo <= endClueLeft; cellNo++)
                     {
                         rowToUpdate = (isRow) ? element : cellNo;
                         colToUpdate = (isRow) ? cellNo : element;
@@ -141,7 +141,7 @@ namespace Nonogram
             int colToUpdate;
             Clue clue;
             //we know there is only one clue. If there is more than one block then the space between them must be filled in.
-            if(blocks.GetBlockCount()>0 && clues.GetClueCount() == 1)
+            if (blocks.GetBlockCount() > 0 && clues.GetClueCount() == 1)
             {
                 blocksStart = blocks.GetBlock(0).BlockStart;
                 blocksEnd = blocks.GetBlock(blocks.GetBlockCount() - 1).BlockStart + blocks.GetBlock(blocks.GetBlockCount() - 1).BlockLength - 1;
@@ -170,30 +170,30 @@ namespace Nonogram
             int rowToUpdate;
             int colToUpdate;
             bool atStart = true;
-            int fillFrom =-1;
+            int fillFrom = -1;
             int fillTo = -1;
             //Cross out cells which logically cannot be filled because there's too big a gap between the first block and the edge of the element.
-            if (blocks.GetBlockCount() > 0 && clues.GetClueCount()>0)
+            if (blocks.GetBlockCount() > 0 && clues.GetClueCount() > 0)
             {
                 for (int loopCount = 0; loopCount < 2; loopCount++)
                 {
-                    if (atStart && blocks.GetBlock(0).BlockColour ==clues.getClue(0).Colour)
+                    if (atStart && blocks.GetBlock(0).BlockColour == clues.getClue(0).Colour)
                     {
                         fillFrom = blocks.GetBlock(0).BlockStart - clues.getClue(0).Number;
-                        fillTo =   fillFrom + blocks.GetBlock(0).BlockLength - 1;
+                        fillTo = fillFrom + blocks.GetBlock(0).BlockLength - 1;
                         fillFrom = (fillFrom < 0) ? 0 : fillFrom;
 
                     }
-                    else if (!atStart && blocks.GetBlock(blocks.GetBlockCount()-1).BlockColour == clues.getClue(clues.GetClueCount()-1).Colour)
+                    else if (!atStart && blocks.GetBlock(blocks.GetBlockCount() - 1).BlockColour == clues.getClue(clues.GetClueCount() - 1).Colour)
                     {
-                        fillFrom = blocks.GetBlock(blocks.GetBlockCount()-1).BlockStart + clues.getClue(clues.GetClueCount()-1).Number;
-                        fillTo = fillFrom + blocks.GetBlock(blocks.GetBlockCount()-1).BlockLength;
-                        fillTo = (fillTo > elementLength-1) ? elementLength-1 : fillTo;
+                        fillFrom = blocks.GetBlock(blocks.GetBlockCount() - 1).BlockStart + clues.getClue(clues.GetClueCount() - 1).Number;
+                        fillTo = fillFrom + blocks.GetBlock(blocks.GetBlockCount() - 1).BlockLength;
+                        fillTo = (fillTo > elementLength - 1) ? elementLength - 1 : fillTo;
                     }
 
-                    if ((fillFrom == 0 && fillTo >= 0)||(fillTo == elementLength && fillFrom <= elementLength))
+                    if ((fillFrom == 0 && fillTo >= 0) || (fillTo == elementLength && fillFrom <= elementLength))
                     {
-                        for (int cellNo = fillFrom; cellNo <= fillTo;cellNo++)
+                        for (int cellNo = fillFrom; cellNo <= fillTo; cellNo++)
                         {
                             rowToUpdate = (isRow) ? element : cellNo;
                             colToUpdate = (isRow) ? cellNo : element;
@@ -208,7 +208,8 @@ namespace Nonogram
 
         public static void IdentifyBlocks(Grid grid, Clues clues, Blocks blocks, int element, int elementLength, bool isRow)
         {
-            if (blocks.GetBlockCount()>0 && !clues.AllCluesSolved())
+            //can clue x be block y?
+            if (blocks.GetBlockCount() > 0 && !clues.AllCluesSolved())
             {
                 Clues cluesBefore = new Clues();
                 Clues cluesAfter = new Clues();
@@ -217,36 +218,38 @@ namespace Nonogram
                 int currentClueMaxEnd = -1; //furthest right the current clue can go and still legally match the current block.
                 int currentClueMinStart = -1; //furthest left the current clue can go and still legally match the current block;
                 blocksAfter.RemoveAll();
-                foreach(Block testBlock in blocks){blocksAfter.AddBlock(testBlock);}
+                foreach (Block testBlock in blocks) { blocksAfter.AddBlock(testBlock); }
                 //for each block, the only question we need to ask is 'can this block legally fit here?'
-                for (int blockNo = 0; blockNo < blocks.GetBlockCount();blockNo++)
+                for (int blockNo = 0; blockNo < blocks.GetBlockCount(); blockNo++)
                 {
-                    if(blocksAfter.GetBlockCount()>0){blocksAfter.RemoveBlock(0);}
+                    if (blocksAfter.GetBlockCount() > 0) { blocksAfter.RemoveBlock(0); }
                     cluesAfter.RemoveAll();
                     cluesBefore.RemoveAll();
-                    foreach (Clue testClue in clues){ cluesAfter.AddClue(testClue); }
+                    foreach (Clue testClue in clues) { cluesAfter.AddClue(testClue); }
                     for (int clueNo = 0; clueNo < clues.GetClueCount(); clueNo++)
-                    {                        
-                        currentClueMaxEnd = GetClueMatchPos(blocks.GetBlock(blockNo), clues, clueNo, true);
-                        //this returns the LAST space that the previous clues can fit into
-                        currentClueMinStart = GetClueMatchPos(blocks.GetBlock(blockNo), clues, clueNo, false);
-                        //this returns the FIRST space that the next clues can fit into
+                    {
+                        currentClueMinStart = GetClueMatchPos(blocks.GetBlock(blockNo), clues, clueNo, true);
+                        //returns first legal space a clue can occupy to the left of the current block
+                        currentClueMaxEnd = GetClueMatchPos(blocks.GetBlock(blockNo), clues, clueNo, false);
+                        //this returns the first legal space a clue can occupy to the right of the current block
 
                         if (cluesAfter.GetClueCount() > 0) { cluesAfter.RemoveClue(0); }
-                        if (blocks.GetBlock(blockNo).BlockLength <= clues.getClue(clueNo).Number)
+                        if (BlockIsLegal(blocks.GetBlock(blockNo), clues.getClue(clueNo)))
                         {
-                            
+                            //do blocks on either side fit?
                         }
-                        else
-                        {
-                            Console.WriteLine("Clue "+ clueNo + " is shorter than current block");
-                        }
+
                         cluesBefore.AddClue(clues.getClue(clueNo));
                     }
                     blocksBefore.AddBlock(blocks.GetBlock(blockNo));
                 }
-                
+
             }
+        }
+
+        public static bool BlockIsLegal(Block block, Clue clue)
+        {
+            return (block.BlockColour == clue.Colour && block.BlockLength <= clue.Number);
         }
 
         public static bool CluesWillFitInSpace(int start, int end, Blocks blocks, Clues clues)
@@ -254,21 +257,22 @@ namespace Nonogram
             if (clues.GetClueLength() < blocks.GetBlockLength()) { return false; } //blocks longer than clues
             if (clues.GetClueLength() > end - start + 1) { return false;} // clues won't fit into this space
             if (blocks.GetBlockCount() == 0) { return true; }
-            //will the provided clues fit in the specified space?
-            Dictionary<Clue, int> cluePositions = new Dictionary<Clue, int>();
-            //add the clues as close together as they'll fit. Start at length - cluelength
-            int startPos = end - start + 1 - clues.GetClueLength();
-            string prevColour = "none";
-            for (int i = 0; i < clues.GetClueCount();i++)
+            if (blocks.GetBlockCount() > 0)
             {
-                if (prevColour == clues.getClue(i).Colour) { startPos += 1; }
-                cluePositions.Add(clues.getClue(i),startPos);
-                startPos += clues.getClue(i).Number;
-                prevColour = clues.getClue(i).Colour;
+                if (blocks.GetBlock(0).BlockStart < start || blocks.GetBlock(blocks.GetBlockCount()-1).BlockStart + blocks.GetBlock(blocks.GetBlockCount()-1).BlockLength-1 > end) 
+                {
+                    return false;
+                    //blocks outwith specified range
+                }
+
             }
-            //this sets things up. Now see if all clues are either in free space or entirely over blocks
+            //need to place clues alongside blocks and check mapping
+
+
+            return false;
 
         }
+
 
         public static int GetClueMatchPos(Block block, Clues clues, int clueId, bool start)
         {
@@ -289,6 +293,7 @@ namespace Nonogram
 
             return positionToReturn;
         }
+
 
         public static bool CluesWillFitInSpaces(Clues clues, Spaces spaces, Blocks blocks)
         {
