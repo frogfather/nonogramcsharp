@@ -71,45 +71,7 @@ namespace Nonogram.Tests
             freePos = fullGrid.GetLastFreeCell(0, false);
             Assert.AreEqual(-1, freePos);
         }
-        [Test()]
-        public void SpaceCountIsFour()
-        {
-            int spaceCount;
-            spaceCount = spaceGrid.GetSpaces(0, false).getSpaceCount();
-            Assert.AreEqual(4, spaceCount);
-        }
-        [Test()]
-        public void FirstSpaceAtZero()
-        {
-            int spacePos;
-            spacePos = spaceGrid.GetSpaces(0, false).getSpace(0).SpaceStart;
-            Assert.AreEqual(0, spacePos);
 
-        }
-
-        [Test()]
-        public void SecondSpaceAtTwo()
-        {
-            int spacePos;
-            spacePos = spaceGrid.GetSpaces(0, false).getSpace(1).SpaceStart;
-            Assert.AreEqual(2, spacePos);
-
-        }
-        [Test()]
-        public void ThirdSpaceAtFive()
-        {
-            int spacePos;
-            spacePos = spaceGrid.GetSpaces(0, false).getSpace(2).SpaceStart;
-            Assert.AreEqual(5, spacePos);
-        }
-        
-        [Test()]
-        public void FourthSpaceLengthIsOne()
-        {
-            int spaceLength;
-            spaceLength = spaceGrid.GetSpaces(0, false).getSpace(3).SpaceLength;
-            Assert.AreEqual(1, spaceLength);
-        }
 
     }
 }

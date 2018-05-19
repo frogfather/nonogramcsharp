@@ -9,6 +9,7 @@ namespace Nonogram
             _column = column;
             _userValue = "clear";
             AutoValue = "clear";
+            _clues = new Clues();
         }
 
         public int CellColumn
@@ -104,5 +105,6 @@ namespace Nonogram
         private int _row;
         private string _userValue;
         private string _backgroundColour; //check it is a colour?
+        private Clues _clues;
     }
 }

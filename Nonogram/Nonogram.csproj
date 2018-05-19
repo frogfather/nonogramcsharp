@@ -44,15 +44,9 @@
     <Compile Include="Autosolve.cs" />
     <Compile Include="PuzzleData.cs" />
     <Compile Include="Display.cs" />
-    <Compile Include="Block.cs" />
     <Compile Include="Tests\IdentifyBlocksTest.cs" />
     <Compile Include="Tests\OverallClueLengthTest.cs" />
-    <Compile Include="Blocks.cs" />
-    <Compile Include="BlockData.cs" />
     <Compile Include="Tests\GridTests.cs" />
-    <Compile Include="Space.cs" />
-    <Compile Include="Spaces.cs" />
-    <Compile Include="SpaceData.cs" />
     <Compile Include="Tests\CluesWillFitTests.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
