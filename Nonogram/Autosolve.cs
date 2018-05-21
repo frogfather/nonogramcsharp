@@ -31,9 +31,6 @@ namespace Nonogram
                 solvedThisRound += MethodRunner(gameToSolve, "SingleClue");
                 Console.WriteLine("Edge Proximity");
                 solvedThisRound += MethodRunner(gameToSolve, "EdgeProximity");
-                Console.WriteLine("Identify Blocks - move elsewhere later");
-                solvedThisRound += MethodRunner(gameToSolve, "IdentifyBlocks");
-
                 totalSolvedCells += solvedThisRound;
                 loopCount += 1;
                 Console.WriteLine("End loop no " + loopCount);
@@ -118,7 +115,7 @@ namespace Nonogram
                     {
                         rowToUpdate = (isRow) ? element : cellNo;
                         colToUpdate = (isRow) ? cellNo : element;
-                        if (Update(grid, colToUpdate, rowToUpdate, clues.getClue(clueNo).Colour)) { filled += 1; }
+                        if (Update(grid, colToUpdate, rowToUpdate, clues.getClue(clueNo).Colour, clues.getClue(clueNo),isRow)) { filled += 1; }
                     }
                 }
             }
@@ -127,7 +124,55 @@ namespace Nonogram
 
         private static int SingleClue(Grid grid, Clues clues, int element, int elementLength, bool isRow)
         {
-            return 0;
+            int filled = 0;
+            int rowToUpdate;
+            int colToUpdate;
+
+            if (clues.GetClueCount() == 1 && !grid.AllCellsClear(element,isRow))
+            {                
+                int firstFilled = -1;
+                int lastFilled = -1;
+                for (int i = 0; i < elementLength;i++)
+                {
+                    string cellColour = grid.GetElementColour(i, element, elementLength, isRow);
+                    if (cellColour != "cross" && cellColour != "clear")
+                    {
+                        if (firstFilled == -1) { firstFilled = i; }
+                        lastFilled = i;
+                    }
+                }
+                //now compare filled length to length of clue
+                Console.WriteLine("filled cells start " + firstFilled);
+                Console.WriteLine("filled cells end " + lastFilled);
+                if (firstFilled>-1)
+                {
+                    int lowerLimit = lastFilled - clues.getClue(0).Number;
+                    int upperLimit = firstFilled + clues.getClue(0).Number;
+                    Console.WriteLine("lower limit " + lowerLimit);
+                    Console.WriteLine("upper limit " + upperLimit);
+                    if (lowerLimit >=0)
+                    {
+                        for (int cellNo = 0; cellNo <= lowerLimit;cellNo++)
+                        {
+                            rowToUpdate = (isRow) ? element : cellNo;
+                            colToUpdate = (isRow) ? cellNo : element;
+                            if (Update(grid, colToUpdate, rowToUpdate, "cross", clues.getClue(0), isRow)) { filled += 1; }   
+                        }
+                    }
+                    if (upperLimit < elementLength)
+                    {
+                        for (int cellNo = upperLimit; cellNo < elementLength;cellNo++)
+                        {
+                            rowToUpdate = (isRow) ? element : cellNo;
+                            colToUpdate = (isRow) ? cellNo : element;
+                            if (Update(grid, colToUpdate, rowToUpdate, "cross", clues.getClue(0), isRow)) { filled += 1; }   
+                        }
+                    }
+                }
+
+            }
+
+            return filled;
         }
 
         public static int EdgeProximity(Grid grid, Clues clues, int element, int elementLength, bool isRow)
@@ -136,18 +181,22 @@ namespace Nonogram
         }
 
 
-        private static bool Update(Grid grid, int col, int row, string value)
+        private static bool Update(Grid grid, int col, int row, string pattern, Clue clue, bool isRow)
         {
-            if (grid.GetCell(col, row).AutoValue != value)
+            if (grid.GetCell(col, row).AutoValue != pattern) //maybe pattern should be optional and take clue colour if none
             {
-                grid.GetCell(col, row).AutoValue = value;
+                grid.GetCell(col, row).AutoValue = pattern;
                 return true;
+            }
+            if (isRow) 
+            { 
+                grid.GetCell(col, row).AddRowClue(clue);
             }
             else
             {
-                return false;
+                grid.GetCell(col, row).AddColClue(clue); 
             }
-
+            return false;
         }
     }
 }

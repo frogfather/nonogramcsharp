@@ -139,7 +139,7 @@ namespace Nonogram
 
         public string GetElementColour(int position, int element, int elementLength, bool isRow)
         {
-            if (position >= elementLength)
+            if (position >= elementLength) 
             {
                 return "cross";
             }
@@ -148,13 +148,7 @@ namespace Nonogram
             {                
                 return GetCell(position, element).AutoValue;
             }
-            else
-            {
-                
-                return GetCell(element, position).AutoValue;
-
-            }
-
+            return GetCell(element, position).AutoValue;
         }
 
         public int GetElementLength(bool isRow)
@@ -170,6 +164,15 @@ namespace Nonogram
 
         }
 
+        public bool AllCellsClear(int element, bool isRow)
+        {
+            int eLength = GetElementLength(isRow);
+            for (int i = 0; i < eLength ; i++)   
+            {
+                if (GetElementColour(i, element, eLength, isRow) != "clear") { return false; }
+            }
+            return true;
+        }
 
         private List<CellRow> _grid;
 

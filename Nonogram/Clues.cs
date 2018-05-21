@@ -30,7 +30,15 @@ namespace Nonogram
                 {
                     return null;
                 }
+        }
 
+        public bool ClueExists(Clue clueToFind)
+        {
+            foreach(Clue clue in _clueList)
+            {
+                if (clue == clueToFind) { return true; }
+            }
+            return false;
         }
 
         public void AddClue(Clue clue)
@@ -60,7 +68,7 @@ namespace Nonogram
             return _clueList.Count;
         }
 
-        public int GetLargestUnsolvedCluePos()
+        public int GetLargestUnsolvedCluePos() //shouldn't be in model
         {
             int largestPos = -1;
             int largestValue = 0;
@@ -73,7 +81,7 @@ namespace Nonogram
             return largestPos;
         }
 
-        public bool AllCluesSolved()
+        public bool AllCluesSolved() //maybe should be elsewhere
         {
             foreach(Clue clue in _clueList)
             {

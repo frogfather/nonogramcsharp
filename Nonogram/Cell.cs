@@ -9,7 +9,8 @@ namespace Nonogram
             _column = column;
             _userValue = "clear";
             AutoValue = "clear";
-            _clues = new Clues();
+            _rowclues = new Clues();
+            _colclues = new Clues();
         }
 
         public int CellColumn
@@ -26,6 +27,7 @@ namespace Nonogram
                 }
             }
         }
+
         public int CellRow
         {
             get
@@ -100,11 +102,41 @@ namespace Nonogram
             get; set;
         }
 
+        public void AddRowClue(Clue clue)
+        {
+            if (!_rowclues.ClueExists(clue)){_rowclues.AddClue(clue);}
+        }
+
+        public void AddColClue(Clue clue)
+        {
+            if (!_colclues.ClueExists(clue)) { _colclues.AddClue(clue); }
+        }
+
+        public Clues GetRowClues()
+        {
+            return _rowclues;
+        }
+        public Clues GetColClues()
+        {
+            return _colclues;
+        }
+
+        public int GetRowClueCount()
+        {
+            return _rowclues.GetClueCount();
+        }
+
+        public int GetColClueCount()
+        {
+            return _colclues.GetClueCount();
+        }
+
         public event ValueChangedDelegate ValueChanged;
         private int _column;
         private int _row;
         private string _userValue;
         private string _backgroundColour; //check it is a colour?
-        private Clues _clues;
+        private Clues _rowclues;
+        private Clues _colclues;
     }
 }
