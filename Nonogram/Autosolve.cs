@@ -211,13 +211,18 @@ namespace Nonogram
             //can clue x be block y?
             //add all clues to all blocks and remove when shown not to be possible?
             //start with each block containing all clues. Now remove clues that can't be that block
-            string[,] refRow = new string[elementLength, 2];
-            string[,] testRow = new string[elementLength,2];
+            string[,] refRow = new string[elementLength, 4];
             if (blocks.GetBlockCount() > 0 && clues.GetClueCount() > 0 && !clues.AllCluesSolved())
             {
-                AddAllCluesToBlocks(blocks,clues);
+                AddAllCluesToBlocks(blocks,clues);                            
                 AddBlockPositions(refRow, blocks,grid,element,elementLength,isRow);
-
+                AddCluePositions(refRow, clues, grid, element, elementLength, isRow);
+                bool done = false;
+                while (!done)
+                {
+                    //now need to try all positions of clues and see if that position is legal
+                    //this may get messy
+                }
             }
         }
 
@@ -256,10 +261,35 @@ namespace Nonogram
                     array[cell, 1] = i.ToString();
                 }
             }    
-            Console.WriteLine("element "+element + " is row "+ isRow);
-            for (int i = 0; i < elementLength; i++) { Console.Write(array[i, 0] + ":" + array[i, 1]); }
         }
        
+        private static void AddCluePositions(string[,] array, Clues clues, Grid grid, int element, int elementLength, bool isRow)
+        {
+            //add clue positions and clue number to levels 2 and 3 of the array
+            int cellPos = elementLength - clues.GetClueLength();
+            int clueLength;
+            for (int i = 0; i < clues.GetClueCount(); i++)
+            {
+                if (i > 0 && clues.getClue(i - 1).Colour == clues.getClue(i).Colour)
+                {
+                    array[cellPos, 2] = "cross";
+                    array[cellPos, 3] = "-1";
+                    cellPos += 1;
+                }
+
+                clueLength = clues.getClue(i).Number;
+                while (clueLength > 0)
+                {
+                    array[cellPos, 2] = clues.getClue(i).Colour;
+                    array[cellPos, 3] = i.ToString();
+                    clueLength -= 1;
+                    cellPos += 1;
+                }
+
+            }
+
+        }
+
         public static bool CluesWillFitInSpace(int start, int end, Blocks blocks, Clues clues)
         {            
             if (clues.GetClueLength() < blocks.GetBlockLength()) { return false; } //blocks longer than clues
