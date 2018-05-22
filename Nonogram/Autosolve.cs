@@ -209,40 +209,14 @@ namespace Nonogram
         public static void IdentifyBlocks(Grid grid, Clues clues, Blocks blocks, int element, int elementLength, bool isRow)
         {
             //can clue x be block y?
-            if (blocks.GetBlockCount() > 0 && !clues.AllCluesSolved())
+            //add all clues to all blocks and remove when shown not to be possible?
+            //start with each block containing all clues. Now remove clues that can't be that block
+            string[,] refRow = new string[elementLength, 2];
+            string[,] testRow = new string[elementLength,2];
+            if (blocks.GetBlockCount() > 0 && clues.GetClueCount() > 0 && !clues.AllCluesSolved())
             {
-                Clues cluesBefore = new Clues();
-                Clues cluesAfter = new Clues();
-                Blocks blocksAfter = new Blocks();
-                Blocks blocksBefore = new Blocks();
-                int currentClueMaxEnd = -1; //furthest right the current clue can go and still legally match the current block.
-                int currentClueMinStart = -1; //furthest left the current clue can go and still legally match the current block;
-                blocksAfter.RemoveAll();
-                foreach (Block testBlock in blocks) { blocksAfter.AddBlock(testBlock); }
-                //for each block, the only question we need to ask is 'can this block legally fit here?'
-                for (int blockNo = 0; blockNo < blocks.GetBlockCount(); blockNo++)
-                {
-                    if (blocksAfter.GetBlockCount() > 0) { blocksAfter.RemoveBlock(0); }
-                    cluesAfter.RemoveAll();
-                    cluesBefore.RemoveAll();
-                    foreach (Clue testClue in clues) { cluesAfter.AddClue(testClue); }
-                    for (int clueNo = 0; clueNo < clues.GetClueCount(); clueNo++)
-                    {
-                        currentClueMinStart = GetClueMatchPos(blocks.GetBlock(blockNo), clues, clueNo, true);
-                        //returns first legal space a clue can occupy to the left of the current block
-                        currentClueMaxEnd = GetClueMatchPos(blocks.GetBlock(blockNo), clues, clueNo, false);
-                        //this returns the first legal space a clue can occupy to the right of the current block
-
-                        if (cluesAfter.GetClueCount() > 0) { cluesAfter.RemoveClue(0); }
-                        if (BlockIsLegal(blocks.GetBlock(blockNo), clues.getClue(clueNo)))
-                        {
-                            //do blocks on either side fit?
-                        }
-
-                        cluesBefore.AddClue(clues.getClue(clueNo));
-                    }
-                    blocksBefore.AddBlock(blocks.GetBlock(blockNo));
-                }
+                AddAllCluesToBlocks(blocks,clues);
+                AddBlockPositions(refRow, blocks,grid,element,elementLength,isRow);
 
             }
         }
@@ -252,6 +226,40 @@ namespace Nonogram
             return (block.BlockColour == clue.Colour && block.BlockLength <= clue.Number);
         }
 
+        private static void AddAllCluesToBlocks(Blocks blocks, Clues clues)
+        {
+            foreach (Block block in blocks)
+            {
+                foreach (Clue clue in clues)
+                {
+                    block.AddClue(clue);
+                }
+            }
+        }
+
+        private static void AddBlockPositions(string[,] array, Blocks blocks, Grid grid, int element, int elementLength, bool isRow)
+        {
+            //first fill in the array with any clear or crossed squares
+            for (int cell = 0; cell < elementLength;cell++)
+            {
+                array[cell, 0] = grid.GetElementColour(cell, element, elementLength, isRow);
+                array[cell, 1] = "-1";
+            }
+            for (int i = 0; i < blocks.GetBlockCount();i++)
+            {
+                int bLength = blocks.GetBlock(i).BlockLength;
+                int bStart = blocks.GetBlock(i).BlockStart;
+                string bColour = blocks.GetBlock(i).BlockColour;
+                //fill in the array with the block positions. Level 1 is colour, level2 is block no
+                for (int cell = bStart; cell < bStart + bLength;cell++)
+                {                    
+                    array[cell, 1] = i.ToString();
+                }
+            }    
+            Console.WriteLine("element "+element + " is row "+ isRow);
+            for (int i = 0; i < elementLength; i++) { Console.Write(array[i, 0] + ":" + array[i, 1]); }
+        }
+       
         public static bool CluesWillFitInSpace(int start, int end, Blocks blocks, Clues clues)
         {            
             if (clues.GetClueLength() < blocks.GetBlockLength()) { return false; } //blocks longer than clues
