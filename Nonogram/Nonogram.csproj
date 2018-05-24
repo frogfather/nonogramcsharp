@@ -55,6 +55,7 @@
     <Compile Include="SpaceData.cs" />
     <Compile Include="Tests\CluesWillFitTests.cs" />
     <Compile Include="Utilities.cs" />
+    <Compile Include="BlockIdentifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

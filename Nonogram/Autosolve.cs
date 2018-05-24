@@ -209,20 +209,13 @@ namespace Nonogram
         public static void IdentifyBlocks(Grid grid, Clues clues, Blocks blocks, int element, int elementLength, bool isRow)
         {
             //can clue x be block y?
-            //add all clues to all blocks and remove when shown not to be possible?
-            //start with each block containing all clues. Now remove clues that can't be that block
-            string[,] refRow = new string[elementLength, 4];
+            //should be possible to do this without arrays
+            //position of clue_n - for i = startpos to cluelength-1 check overlap
+
             if (blocks.GetBlockCount() > 0 && clues.GetClueCount() > 0 && !clues.AllCluesSolved())
             {
-                AddAllCluesToBlocks(blocks,clues);                            
-                AddBlockPositions(refRow, blocks,grid,element,elementLength,isRow);
-                AddCluePositions(refRow, clues, grid, element, elementLength, isRow);
-                bool done = false;
-                while (!done)
-                {
-                    //now need to try all positions of clues and see if that position is legal
-                    //this may get messy
-                }
+                BlockIdentifier bId = new BlockIdentifier(clues, blocks, elementLength);
+                bId.IdentifyBlocks();
             }
         }
 
@@ -231,63 +224,46 @@ namespace Nonogram
             return (block.BlockColour == clue.Colour && block.BlockLength <= clue.Number);
         }
 
-        private static void AddAllCluesToBlocks(Blocks blocks, Clues clues)
+        private static void UpdateBlocks(string[,] bArray,string[,] cArray , Clues clues, Blocks blocks)
         {
-            foreach (Block block in blocks)
-            {
-                foreach (Clue clue in clues)
-                {
-                    block.AddClue(clue);
-                }
-            }
+            //this adds the clues to the relevant blocks
         }
 
-        private static void AddBlockPositions(string[,] array, Blocks blocks, Grid grid, int element, int elementLength, bool isRow)
+        private static bool FindNextLegalLayout(string[,] bArray, string[,] cArray, Clues clues)
         {
-            //first fill in the array with any clear or crossed squares
-            for (int cell = 0; cell < elementLength;cell++)
+            bool legalLayoutFound = false;
+            //this handles the mechanics of moving the clues past the blocks
+            //is there a space to the left of clue n?
+            //if so, move clue n left 1 space
+            //if not, move clue n+1 1 space and return clues 0 - n to be as close as possible to it
+
+            int lowestMovableClue = 0;
+            int movePoint = cArray.Length - clues.GetClueLength(lowestMovableClue+1);
+            //once we move the clues apart we don't need the cross between them
+
+            if (cArray[0,0] == "clear")
             {
-                array[cell, 0] = grid.GetElementColour(cell, element, elementLength, isRow);
-                array[cell, 1] = "-1";
+                ShiftArrayLeft(cArray, movePoint);
             }
-            for (int i = 0; i < blocks.GetBlockCount();i++)
-            {
-                int bLength = blocks.GetBlock(i).BlockLength;
-                int bStart = blocks.GetBlock(i).BlockStart;
-                string bColour = blocks.GetBlock(i).BlockColour;
-                //fill in the array with the block positions. Level 1 is colour, level2 is block no
-                for (int cell = bStart; cell < bStart + bLength;cell++)
-                {                    
-                    array[cell, 1] = i.ToString();
-                }
-            }    
+
+
+            return legalLayoutFound;
         }
-       
-        private static void AddCluePositions(string[,] array, Clues clues, Grid grid, int element, int elementLength, bool isRow)
+
+        private static void ShiftArrayLeft(string[,] cArray, int startPoint)
         {
-            //add clue positions and clue number to levels 2 and 3 of the array
-            int cellPos = elementLength - clues.GetClueLength();
-            int clueLength;
-            for (int i = 0; i < clues.GetClueCount(); i++)
-            {
-                if (i > 0 && clues.getClue(i - 1).Colour == clues.getClue(i).Colour)
-                {
-                    array[cellPos, 2] = "cross";
-                    array[cellPos, 3] = "-1";
-                    cellPos += 1;
-                }
+            
+        }
 
-                clueLength = clues.getClue(i).Number;
-                while (clueLength > 0)
-                {
-                    array[cellPos, 2] = clues.getClue(i).Colour;
-                    array[cellPos, 3] = i.ToString();
-                    clueLength -= 1;
-                    cellPos += 1;
-                }
+        private static bool LayoutIsLegal(string[,] cArray, string[,] bArray)
+        {
+            bool isLegal = false;
+            //this compares levels 0 and 2.
+            //if they are different apply the following rules:
+            //can't have one cross and one colour
+            //can't have colour on 0 and clear on 2
 
-            }
-
+            return isLegal;    
         }
 
         public static bool CluesWillFitInSpace(int start, int end, Blocks blocks, Clues clues)
