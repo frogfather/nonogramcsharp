@@ -28,34 +28,34 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Cell.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="CellRow.cs" />
-    <Compile Include="Grid.cs" />
-    <Compile Include="ValueChangedDelegate.cs" />
     <Compile Include="ValueChangedEventArgs.cs" />
-    <Compile Include="Clue.cs" />
-    <Compile Include="Clues.cs" />
-    <Compile Include="ClueData.cs" />
-    <Compile Include="Columns.cs" />
-    <Compile Include="Rows.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="GameData.cs" />
     <Compile Include="Autosolve.cs" />
     <Compile Include="PuzzleData.cs" />
-    <Compile Include="Display.cs" />
-    <Compile Include="Block.cs" />
     <Compile Include="Tests\IdentifyBlocksTest.cs" />
     <Compile Include="Tests\OverallClueLengthTest.cs" />
-    <Compile Include="Blocks.cs" />
-    <Compile Include="BlockData.cs" />
     <Compile Include="Tests\GridTests.cs" />
-    <Compile Include="Space.cs" />
-    <Compile Include="Spaces.cs" />
-    <Compile Include="SpaceData.cs" />
     <Compile Include="Tests\CluesWillFitTests.cs" />
     <Compile Include="Utilities.cs" />
-    <Compile Include="BlockIdentifier.cs" />
+    <Compile Include="Models\Block.cs" />
+    <Compile Include="Models\BlockIdentifier.cs" />
+    <Compile Include="Models\Blocks.cs" />
+    <Compile Include="Models\Cell.cs" />
+    <Compile Include="Models\CellRow.cs" />
+    <Compile Include="Models\Clue.cs" />
+    <Compile Include="Models\Clues.cs" />
+    <Compile Include="Models\Columns.cs" />
+    <Compile Include="Models\Game.cs" />
+    <Compile Include="Models\Grid.cs" />
+    <Compile Include="Models\Rows.cs" />
+    <Compile Include="Models\Space.cs" />
+    <Compile Include="Models\Spaces.cs" />
+    <Compile Include="Views\Display.cs" />
+    <Compile Include="Structs\BlockData.cs" />
+    <Compile Include="Structs\ClueData.cs" />
+    <Compile Include="Structs\GameData.cs" />
+    <Compile Include="Structs\SpaceData.cs" />
+    <Compile Include="Delegates\ValueChangedDelegate.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -68,6 +68,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tests\" />
+    <Folder Include="Models\" />
+    <Folder Include="Views\" />
+    <Folder Include="Structs\" />
+    <Folder Include="Delegates\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

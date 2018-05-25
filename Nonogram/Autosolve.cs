@@ -56,7 +56,7 @@ namespace Nonogram
             string elementType = "row";
             Clues currentElementClues;
             Blocks currentElementBlocks;
-            Spaces currentSpaces;
+            Spaces currentElementSpaces;
 
             for (int loopCount = 0; loopCount < 2; loopCount++)
             {
@@ -75,7 +75,7 @@ namespace Nonogram
                     }
 
                     currentElementBlocks = gameToSolve.Grid().GetBlocks(element, isRow);
-                    currentSpaces = gameToSolve.Grid().GetSpaces(element, isRow);
+                    currentElementSpaces = gameToSolve.Grid().GetSpaces(element, isRow);
                     switch (methodToCall)
                     {
                         case "Overlap":
@@ -88,7 +88,7 @@ namespace Nonogram
                             solved = EdgeProximity(gameToSolve.Grid(), currentElementClues, currentElementBlocks, element, elementLength, isRow);
                             break;
                         case "IdentifyBlocks":
-                            IdentifyBlocks(gameToSolve.Grid(), currentElementClues, currentElementBlocks, element, elementLength, isRow);
+                            IdentifyBlocks(gameToSolve.Grid(), currentElementClues, currentElementBlocks, currentElementSpaces, element, elementLength, isRow);
                             break;
                         default:
                             Console.WriteLine("unknown method called");
@@ -206,7 +206,7 @@ namespace Nonogram
             return filled;
         }
 
-        public static void IdentifyBlocks(Grid grid, Clues clues, Blocks blocks, int element, int elementLength, bool isRow)
+        public static void IdentifyBlocks(Grid grid, Clues clues, Blocks blocks, Spaces spaces, int element, int elementLength, bool isRow)
         {
             //can clue x be block y?
             //should be possible to do this without arrays
@@ -214,7 +214,7 @@ namespace Nonogram
 
             if (blocks.GetBlockCount() > 0 && clues.GetClueCount() > 0 && !clues.AllCluesSolved())
             {
-                BlockIdentifier bId = new BlockIdentifier(clues, blocks, elementLength);
+                BlockIdentifier bId = new BlockIdentifier(clues, blocks, spaces, elementLength);
                 bId.IdentifyBlocks();
             }
         }
