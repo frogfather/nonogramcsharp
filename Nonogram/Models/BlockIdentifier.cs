@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 namespace Nonogram
 {
     public class BlockIdentifier
     {
+        /// <summary>
+        /// This class takes a Clues object, a Spaces object and a Blocks object and 
+        /// for each block determines which clues that block could legally be
+        /// </summary>
+
         public BlockIdentifier(Clues clues, Blocks blocks, Spaces spaces, int elementLength)
         {
             _blocks = blocks;
@@ -17,59 +23,107 @@ namespace Nonogram
             
         }
 
+        /// <summary>
+        /// The only public method. It iterates through each legal position of the clues and
+        /// checks to see if that arrangement is legal
+        /// </summary>
+
         public void IdentifyBlocks()
         {
+            Clues[] permittedClues = new Clues[_blocks.GetBlockCount()]; //temporary array to hold clues
+            InitialisePermittedClues(permittedClues); //the array initially has null values. This sets them to empty Clues
             bool positionsToTest = true;
             while (positionsToTest)
             {
-                if (ArrangementIsLegal()) { UpdateBlocks(); }
+                ClearPermittedClues(permittedClues);
+                if (ArrangementIsLegal(permittedClues)) { UpdateBlocks(permittedClues); }
                 positionsToTest = FindNextCluePosition();
             }
         }
 
-        private void UpdateBlocks()
+        /// <summary>
+        /// Sets each element of the permitted clues array to a new empty Clues object
+        /// </summary>
+
+        private void InitialisePermittedClues(Clues[] clueList)
         {
-            //can we avoid having to test legality of each clue and block again?
-            //for each block, if the arrangement is legal and a clue is overlapping it then that block can be that clue
+            for (int i = 0; i < clueList.Length; i++)
+            {
+                clueList[i] = new Clues();
+            }
         }
 
-        private bool ArrangementIsLegal()
+        /// <summary>
+        /// Empties each Clues object in the array
+        /// </summary>
+
+        private void ClearPermittedClues(Clues[] clueList)
+        {
+            foreach(Clues clues in clueList)
+            {                
+                clues.RemoveAll();
+            }
+        }
+
+
+        /// <summary>
+        /// Adds to each block any clues that could legally be that block
+        /// </summary>
+
+        private void UpdateBlocks(Clues[] clueList)
+        {
+            for (int blockNo = 0; blockNo < _blocks.GetBlockCount(); blockNo++)
+            {
+                foreach(Clue clue in clueList[blockNo])
+                {
+                    _blocks.GetBlock(blockNo).AllClues().AddClue(clue);
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Checks whether the position of the clues is legal
+        /// </summary>
+        ///<remarks>
+        /// For an arrangement of clues and blocks to be legal the following rules are applied:
+        /// 1) Each block must be entirely covered by a clue (it can be longer than the block)
+        /// 2) The clue must be in a space
+        /// The methods ClueCoversBlock and ClueInSpace are called to check this for each clue
+        /// </remarks>
+
+        private bool ArrangementIsLegal(Clues[] clueList)
         {
             bool arrLegal = true;
             int clueNo = 0;
             bool clueLegal;
 
-            foreach (Block block in _blocks)
+            for (int blockNo = 0; blockNo < _blocks.GetBlockCount();blockNo++)
             {
                 clueLegal = false;
-                int blockEnd = block.BlockStart + block.BlockLength - 1;
+                int blockEnd = _blocks.GetBlock(blockNo).BlockStart + _blocks.GetBlockLength() - 1;
                 while (!clueLegal && clueNo < _clues.GetClueCount())
                 {                                                            
-                    clueLegal = ClueCoversBlock(_clues.getClue(clueNo),block,_cluePositions[clueNo]) && ClueInSpace(_clues.getClue(clueNo),_spaces,_cluePositions[clueNo]);
-                    if (!clueLegal) { clueNo += 1; }
+                    clueLegal = ClueCoversBlock(_clues.getClue(clueNo),_blocks.GetBlock(blockNo),_cluePositions[clueNo]) && ClueInSpace(_clues.getClue(clueNo),_spaces,_cluePositions[clueNo]);
+                    if (clueLegal)
+                    {
+                        //update the temporary list
+                        clueList[blockNo].AddClue(_clues.getClue(clueNo));
+                    }
+                    else
+                    { 
+                        clueNo += 1; 
+                    }
                 }
                 arrLegal = (clueNo < _clues.GetClueCount());
             }
 
-            if (arrLegal)
-            {
-                Console.WriteLine("arrangement legal: ");
-                Console.Write("blocks: ");
-                for (int blk = 0; blk < _blocks.GetBlockCount();blk++)
-                {
-                    Console.Write(_blocks.GetBlock(blk).BlockStart+":"+_blocks.GetBlock(blk).BlockLength+", ");
-                }
-                Console.WriteLine("---");
-                Console.Write("clues: ");
-                for (int i = 0; i < _cluePositions.Length; i++)
-                {
-                    Console.Write(_cluePositions[i] +":"+ _clues.getClue(i).Number + ", ");
-                }
-                Console.WriteLine("***");
-            }
-
             return arrLegal;
         }
+
+        /// <summary>
+        /// Checks that the supplied clue covers the supplied block completely. The clue can be longer than the block
+        /// </summary>
 
         private bool ClueCoversBlock(Clue clue, Block block, int clueStart)
         {
@@ -77,6 +131,10 @@ namespace Nonogram
             int blockEnd = block.BlockStart + block.BlockLength - 1;
             return (clueStart <= block.BlockStart && clueEnd >= blockEnd && clue.Colour == block.BlockColour);
         }
+
+        /// <summary>
+        /// Checks that the clue is entirely within a space (i.e. not opposite a cross square)
+        /// </summary>
 
         private bool ClueInSpace(Clue clue, Spaces spaces, int clueStart)
         {
@@ -88,6 +146,11 @@ namespace Nonogram
             }
             return false;
         }
+
+        /// <summary>
+        /// When moving the clues checks whether there is room to move a particular clue. If not the next clue is moved
+        /// If no clues can be moved then all possible clue positions have been tried
+        /// </summary>
 
         private bool RoomToMoveClue(int clueNo)
         {
@@ -109,10 +172,15 @@ namespace Nonogram
             return spaceToLeft > 0;
         }
 
+
+        /// <summary>
+        /// Returns true if there is another available position for the clues
+        /// It starts with clue 0 and checks if it can be moved. If not it moves to clue 1 and so on. If no clues can 
+        /// be moved then there are no more positions for the clues and the method returns false.
+        /// </summary>
+
         private bool FindNextCluePosition()
         {            
-            //moves the clue positions to the next available space
-            //if we can move the first clue then do so, otherwise move the next etc
             int clueToMove = 0;
             bool canMoveClue = false;
             bool done = false;
@@ -126,6 +194,10 @@ namespace Nonogram
             if (canMoveClue) { MoveClue(clueToMove); }
             return canMoveClue;
         }
+
+        /// <summary>
+        /// Moves the specified clue. All clues before this one are then moved as close as possible to it
+        /// </summary>
 
         private void MoveClue(int clueNo)
         {
@@ -145,5 +217,6 @@ namespace Nonogram
         Blocks _blocks;
         Clues _clues;
         Spaces _spaces;
+
     }
 }

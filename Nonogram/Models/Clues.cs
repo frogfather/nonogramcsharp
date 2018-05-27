@@ -38,6 +38,11 @@ namespace Nonogram
             _clueList.Add(clue);
         }
 
+        public bool ClueExists(Clue clue)
+        {
+            return _clueList.IndexOf(clue) > -1;
+        }
+
         public Clue RemoveClue(int index)
         {
             if (index >= 0 && index < _clueList.Count)
@@ -47,7 +52,6 @@ namespace Nonogram
                 return selected;
             }
             return null;
-
         }
 
         public void RemoveAll()

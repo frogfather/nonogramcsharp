@@ -35,7 +35,6 @@
     <Compile Include="Tests\IdentifyBlocksTest.cs" />
     <Compile Include="Tests\OverallClueLengthTest.cs" />
     <Compile Include="Tests\GridTests.cs" />
-    <Compile Include="Tests\CluesWillFitTests.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Models\Block.cs" />
     <Compile Include="Models\BlockIdentifier.cs" />
