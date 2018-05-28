@@ -186,7 +186,7 @@ namespace Nonogram
 
 
         /// <summary>
-        /// Deals with clues that are close to the edge of the grid
+        /// Deals with clues that are close to the edge of a spaces
         /// </summary>
         /// <remarks>
         /// Example: if we have a clue of length 3 as the first clue and cell 3 is filled in then cell 0 cannot be filled.

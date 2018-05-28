@@ -97,6 +97,8 @@ namespace Nonogram
             bool arrLegal = true;
             int clueNo = 0;
             bool clueLegal;
+            //we should check the clues are legal first
+            if (!CluesFitInSpaces(_clues, _spaces, _cluePositions)) { return false; }
 
             for (int blockNo = 0; blockNo < _blocks.GetBlockCount();blockNo++)
             {
@@ -104,7 +106,7 @@ namespace Nonogram
                 int blockEnd = _blocks.GetBlock(blockNo).BlockStart + _blocks.GetBlockLength() - 1;
                 while (!clueLegal && clueNo < _clues.GetClueCount())
                 {                                                            
-                    clueLegal = ClueCoversBlock(_clues.getClue(clueNo),_blocks.GetBlock(blockNo),_cluePositions[clueNo]) && ClueInSpace(_clues.getClue(clueNo),_spaces,_cluePositions[clueNo]);
+                    clueLegal = ClueCoversBlock(_clues.getClue(clueNo),_blocks.GetBlock(blockNo),_cluePositions[clueNo]);
                     if (clueLegal)
                     {
                         //update the temporary list
@@ -115,8 +117,8 @@ namespace Nonogram
                         clueNo += 1; 
                     }
                 }
-                arrLegal = (clueNo < _clues.GetClueCount());
             }
+            arrLegal = (clueNo < _clues.GetClueCount());
 
             return arrLegal;
         }
@@ -136,7 +138,16 @@ namespace Nonogram
         /// Checks that the clue is entirely within a space (i.e. not opposite a cross square)
         /// </summary>
 
-        private bool ClueInSpace(Clue clue, Spaces spaces, int clueStart)
+        private bool CluesFitInSpaces(Clues clues, Spaces spaces, int[] cluePositions)
+        {
+            for (int clueNo = 0; clueNo < clues.GetClueCount(); clueNo++)
+            {
+                if (!ClueFitsInSpace(clues.getClue(clueNo), spaces, cluePositions[clueNo])){ return false;}
+            }
+            return true;
+        }
+
+        private bool ClueFitsInSpace(Clue clue, Spaces spaces, int clueStart)
         {
             //is this clue completely within a space?
             foreach(Space space in spaces)
