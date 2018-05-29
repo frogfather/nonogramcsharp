@@ -36,9 +36,6 @@ namespace Nonogram
                 solvedThisRound += MethodRunner(gameToSolve, "SingleClue");
                 Console.WriteLine("Edge Proximity");
                 solvedThisRound += MethodRunner(gameToSolve, "EdgeProximity");
-                Console.WriteLine("Identify Blocks - move elsewhere later");
-                solvedThisRound += MethodRunner(gameToSolve, "IdentifyBlocks");
-                //IdentifyBlocks should not be here as it doesn't actually solve anything.
                 totalSolvedCells += solvedThisRound;
                 loopCount += 1;
                 Console.WriteLine("End loop no " + loopCount);
@@ -82,19 +79,18 @@ namespace Nonogram
 
                     currentElementBlocks = gameToSolve.Grid().GetBlocks(element, isRow);
                     currentElementSpaces = gameToSolve.Grid().GetSpaces(element, isRow);
+                    IdentifyBlocks(gameToSolve.Grid(), currentElementClues, currentElementBlocks, currentElementSpaces, element, elementLength, isRow);
+
                     switch (methodToCall)
                     {
                         case "Overlap":
-                            solved = Overlap(gameToSolve.Grid(), currentElementClues, currentElementBlocks, element, elementLength, isRow);
+                            solved = Overlap(gameToSolve.Grid(), currentElementClues, currentElementBlocks, currentElementSpaces, element, elementLength, isRow);
                             break;
                         case "SingleClue":
-                            solved = SingleClue(gameToSolve.Grid(), currentElementClues, currentElementBlocks, element, elementLength, isRow);
+                            solved = SingleClue(gameToSolve.Grid(), currentElementClues, currentElementBlocks, currentElementSpaces, element, elementLength, isRow);
                             break;
                         case "EdgeProximity":
-                            solved = EdgeProximity(gameToSolve.Grid(), currentElementClues, currentElementBlocks, element, elementLength, isRow);
-                            break;
-                        case "IdentifyBlocks":
-                            IdentifyBlocks(gameToSolve.Grid(), currentElementClues, currentElementBlocks, currentElementSpaces, element, elementLength, isRow);
+                            solved = EdgeProximity(gameToSolve.Grid(), currentElementClues, currentElementBlocks, currentElementSpaces, element, elementLength, isRow);
                             break;
                         default:
                             Console.WriteLine("unknown method called");
@@ -119,7 +115,8 @@ namespace Nonogram
         /// certain cells that will always be covered.
         /// For example, in an element of 15 cells a clue of length 10 will always cover cells 5 to 9
         /// </remarks>
-        private static int Overlap(Grid grid, Clues clues, Blocks blocks, int element, int elementLength, bool isRow)
+
+        private static int Overlap(Grid grid, Clues clues, Blocks blocks, Spaces spaces, int element, int elementLength, bool isRow)
         {
             int filled = 0;
             int firstFree = grid.GetFirstFreeCell(element, isRow);
@@ -152,7 +149,7 @@ namespace Nonogram
         /// This feels as though it should be able to be part of a different method. We'll see.
         /// </remarks>
         /// 
-        private static int SingleClue(Grid grid, Clues clues, Blocks blocks, int element, int elementLength, bool isRow)
+        private static int SingleClue(Grid grid, Clues clues, Blocks blocks, Spaces spaces, int element, int elementLength, bool isRow)
         {
             int filled = 0;
             int blocksStart;
@@ -192,7 +189,7 @@ namespace Nonogram
         /// Example: if we have a clue of length 3 as the first clue and cell 3 is filled in then cell 0 cannot be filled.
         /// Same can be done at the end of the element.
         /// </remarks>
-        public static int EdgeProximity(Grid grid, Clues clues, Blocks blocks, int element, int elementLength, bool isRow)
+        public static int EdgeProximity(Grid grid, Clues clues, Blocks blocks, Spaces spaces, int element, int elementLength, bool isRow)
         {
             int filled = 0;
             int rowToUpdate;
