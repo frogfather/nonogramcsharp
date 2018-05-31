@@ -124,6 +124,12 @@ namespace Nonogram
             int rowToUpdate;
             int colToUpdate;
 
+            //For a given space, find the clues that HAVE to be in that space and check limits
+            for (int spaceNo = 0; spaceNo < spaces.getSpaceCount();spaceNo++)
+            {
+                Clues cluesToTest = FindFewestClues(spaces, clues, spaceNo);
+            }
+
             for (int clueNo = 0; clueNo < clues.GetClueCount(); clueNo++)
             {
                 //this needs adapted to take account of filled cells
@@ -272,6 +278,19 @@ namespace Nonogram
                 }
 
             }
+        }
+
+        public static Clues FindFewestClues(Spaces spaces, Clues clues, int clueNo)
+        {
+            Clues resultClues = new Clues();
+
+            Spaces spacesBefore = new Spaces();
+            Space spaceToTest;
+            Spaces spacesAfter = new Spaces();
+            //now we want to add the clues one by one to spacesAfter. If they won't fit in SpacesAfter then
+            //we move them to spaceToTest and if they won't fit there we move them to spacesBefore
+
+            return resultClues;
         }
 
         public static bool CluesWillFitInSpaces(Clues clues, Spaces spaces, Blocks blocks)

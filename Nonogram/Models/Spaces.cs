@@ -16,6 +16,11 @@ namespace Nonogram
             }
         }
 
+        public Spaces()
+        {
+            
+        }
+
 
         public void addSpace(SpaceData spaceInfo)
         {
